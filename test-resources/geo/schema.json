@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ably Asset Tracking GeoJson Message",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "Feature"
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "Point"
+        },
+        "coordinates": {
+          "type": "array",
+          "description": "A two-element tuple containing latitude and longitude",
+          "items": [
+            {
+              "description": "Latitude",
+              "type": "number"
+            },
+            {
+              "description": "Longitude",
+              "type": "number"
+            }
+          ],
+          "additionalItems": false
+        }
+      },
+      "additionalProperties": false,
+      "required": ["coordinates", "type"]
+    },
+    "properties": {
+      "type": "object",
+      "properties": {
+        "accuracyHorizontal": {
+          "description": "Object horizontal accuracy in meters.",
+          "type": "number"
+        },
+        "altitude": {
+          "description": "Object altitude in meters. May be positive or negative for above and below sea level measurement.",
+          "type": "number"
+        },
+        "bearing": {
+          "description": "Object bearing (or course) in degrees true North",
+          "type": "number"
+        },
+        "speed": {
+          "description": "Object speed in meters per second",
+          "type": "number"
+        },
+        "time": {
+          "description": "Unix timestamp from when measurment was recorded (in seconds since 1st of January 1970).",
+          "type": "number"
+        },
+        "accuracyVertical": {
+          "description": "Object vertical accuracy in meters.",
+          "type": "number"
+        },
+        "accuracyBearing": {
+          "description": "Object bearing (or course) accuracy in degrees.",
+          "type": "number"
+        },
+        "accuracySpeed": {
+          "description": "Object speed accuracy in meters per second.",
+          "type": "number"
+        },
+        "floor": {
+          "description": "Contains information about the logical floor that object is on in the current building if inside a supported venue. Nil if floor is unavailable. It's estimated value based on altitude and may not refer to actual building.",
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["accuracyHorizontal", "altitude", "bearing", "speed", "time"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["type", "geometry", "properties"]
+}
