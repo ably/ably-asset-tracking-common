@@ -20,7 +20,7 @@ Ably Asset Tracking is:
 
 Where possible this repository self-validates its contents, checked as part of a CI workflow.
 
-`TO-BE-CONFIGURED`
+To run these tests locally you first need to install dependencies with `npm install`. Once these are installed tests are run with `npm test`. Note that these commands require an install of NodeJS (currently tested on v14).
 
 ## Usage in Downstream Repositories
 
