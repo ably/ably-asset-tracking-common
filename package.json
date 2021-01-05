@@ -9,9 +9,5 @@
   "scripts": {
     "test": "mocha"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ably/ably-asset-tracking-common.git"
-  },
-  "license": "ISC"
+  "license": "Apache-2.0"
 }
