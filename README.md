@@ -1,5 +1,7 @@
 # Ably Asset Tracking SDKs - Common Resources
 
+![.github/workflows/test.yml](https://github.com/ably/ably-asset-tracking-common/workflows/.github/workflows/test.yml/badge.svg)
+
 ## Overview
 
 Ably Asset Tracking SDKs provide an easy way to track multiple assets with realtime location updates powered by [Ably](https://ably.io/) realtime network and Mapbox [Navigation SDK](https://docs.mapbox.com/android/navigation/overview/) with location enhancement.
