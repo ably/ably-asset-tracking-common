@@ -1,0 +1,13 @@
+{
+  "name": "ably-asset-tracking-common",
+  "version": "1.0.0",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "jsonschema": "^1.4.0",
+    "mocha": "^8.2.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "license": "Apache-2.0"
+}

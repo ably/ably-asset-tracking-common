@@ -1,5 +1,7 @@
 # Ably Asset Tracking SDKs - Common Resources
 
+![.github/workflows/test.yml](https://github.com/ably/ably-asset-tracking-common/workflows/.github/workflows/test.yml/badge.svg)
+
 ## Overview
 
 Ably Asset Tracking SDKs provide an easy way to track multiple assets with realtime location updates powered by [Ably](https://ably.io/) realtime network and Mapbox [Navigation SDK](https://docs.mapbox.com/android/navigation/overview/) with location enhancement.
@@ -20,7 +22,7 @@ Ably Asset Tracking is:
 
 Where possible this repository self-validates its contents, checked as part of a CI workflow.
 
-`TO-BE-CONFIGURED`
+To run these tests locally you first need to install dependencies with `npm install`. Once these are installed tests are run with `npm test`. Note that these commands require an install of NodeJS (currently tested on v14).
 
 ## Usage in Downstream Repositories
 
