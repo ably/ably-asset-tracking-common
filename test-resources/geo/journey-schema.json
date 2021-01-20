@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ably Asset Tracking Journey",
+  "type": "object",
+  "properties": {
+    "locationUpdates": {
+      "type": "array",
+      "items": {
+        "$ref": "Location"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "required": ["locationUpdates"]
+}
