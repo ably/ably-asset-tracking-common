@@ -9,7 +9,7 @@ const examples = fs.readdirSync(exampleDir);
 const schema = require(path.resolve(geoDir, "journey-schema.json"));
 
 const jsonschema = new Validator();
-jsonschema.addSchema(JSON.parse(fs.readFileSync(path.resolve(geoDir, 'location-schema.json'))), '/Location');
+jsonschema.addSchema(JSON.parse(fs.readFileSync(path.resolve(geoDir, 'location-schema.json'))), 'https://schemas.ably.com/json/asset-tracking-common/Location');
 
 describe("Journey schema", () => {
   examples
