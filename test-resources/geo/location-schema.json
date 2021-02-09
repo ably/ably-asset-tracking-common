@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "Ably Asset Tracking GeoJson Message",
+  "title": "Ably Asset Tracking Location Message",
+  "id": "https://schemas.ably.com/json/asset-tracking-common/Location",
   "type": "object",
   "properties": {
     "type": {

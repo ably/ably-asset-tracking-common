@@ -4,13 +4,14 @@ const path = require('path');
 const jsonschema = require('jsonschema');
 
 const geoDir = path.resolve(__dirname, '..', 'test-resources', 'geo');
-const examples = fs.readdirSync(geoDir);
-const schema = require(path.resolve(geoDir, 'schema.json'));
+const exampleDir = path.resolve(geoDir, 'locations');
+const examples = fs.readdirSync(exampleDir);
+const schema = require(path.resolve(geoDir, 'location-schema.json'));
 
-describe('GeoJson schema', () => {
-  examples.filter(fileName => fileName !== 'schema.json').forEach(fileName => {
-    const instance = JSON.parse(fs.readFileSync(path.resolve(geoDir, fileName)));
-    
+describe('Location schema', () => {
+  examples.forEach((fileName) => {
+    const instance = JSON.parse(fs.readFileSync(path.resolve(exampleDir, fileName)));
+
     it(fileName, () => {
       const { errors } = jsonschema.validate(instance, schema);
       if (fileName.split('-')[0] === 'invalid') {
