@@ -1,0 +1,64 @@
+@startuml
+participant Test
+participant Publisher
+participant Mapbox
+participant Ably
+
+' ----------- Publisher create and start -----------
+activate Mapbox
+activate Ably
+activate Publisher
+
+' ----------- Location update -----------
+Publisher <-- Mapbox: Location update (EVENT)
+Publisher -> Ably: Send location update
+Test <-- Publisher: onLocationUpdated()
+
+' ----------- Location update -----------
+Publisher <-- Mapbox: Location update (EVENT)
+
+' ----------- Publisher stop -----------
+Test -> Publisher: Stop (EVENT)
+note over Publisher
+Stop event enqueued but some other 
+events are already in the queue
+end note
+
+' ----------- Location update continued -----------
+Publisher -> Ably: Send location update
+Test <-- Publisher: onLocationUpdated()
+
+Publisher <-- Mapbox: Location update (EVENT)
+Publisher <-- Ably: Presence message (EVENT)
+Publisher <-- Mapbox: Location update (EVENT)
+
+' ----------- Publisher stop callback -----------
+note over Publisher
+Stop event is being handled
+NO events other than Ably closing
+should be handled from now on
+end note
+note over Publisher #aqua: Does it mean that we can block the events queue?
+note over Mapbox: Mapbox stop is synchronous
+Publisher -> Mapbox: Unregister location observer
+Publisher -> Mapbox: Stop trip session
+Publisher -> Mapbox: Stop Mapbox
+Publisher <- Mapbox: Stopped
+deactivate Mapbox
+
+note over Ably: Ably stop is asynchronous
+Publisher -> Ably: Remove all channels and presence listeners
+Publisher -> Ably: Leave all channels presence
+note over Ably: Wait for leaving all channels presence
+Publisher <-- Ably: Left all channels presence
+Publisher -> Ably: Close ably connection
+note over Ably
+Close Ably connection and 
+wait for it to close
+end note
+Publisher <-- Ably: Connection closed
+Publisher <- Ably: Stopped
+deactivate Ably
+Test <-- Publisher: stop() success
+deactivate Publisher
+@enduml
