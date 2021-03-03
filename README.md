@@ -1,6 +1,6 @@
 # Ably Asset Tracking SDKs - Common Resources
 
-![.github/workflows/test.yml](https://github.com/ably/ably-asset-tracking-common/workflows/.github/workflows/test.yml/badge.svg)
+![.github/workflows/check.yml](https://github.com/ably/ably-asset-tracking-common/workflows/.github/workflows/check.yml/badge.svg)
 
 ## Overview
 
