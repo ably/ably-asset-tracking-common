@@ -1,0 +1,22 @@
+{
+  "name": "asset-tracking-debugger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ably": "^1.2.4",
+    "commander": "^7.0.0",
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.3.3",
+    "keypress": "^0.2.1"
+  },
+  "bin": {
+    "asset-tracking-debugger": "./src/index.js"
+  }
+}
