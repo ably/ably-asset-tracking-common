@@ -6,7 +6,7 @@
     "locationUpdates": {
       "type": "array",
       "items": {
-        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/EnhancedLocationUpdate"
       }
     }
   },

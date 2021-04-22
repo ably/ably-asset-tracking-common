@@ -13,6 +13,10 @@ jsonschema.addSchema(
   JSON.parse(fs.readFileSync(path.resolve(geoDir, 'location-schema.json'))),
   'https://schemas.ably.com/json/asset-tracking-common/Location'
 );
+jsonschema.addSchema(
+  JSON.parse(fs.readFileSync(path.resolve(geoDir, 'enhanced-location-update-schema.json'))),
+  'https://schemas.ably.com/json/asset-tracking-common/EnhancedLocationUpdate'
+);
 
 describe('Journey schema', () => {
   examples.forEach((fileName) => {
