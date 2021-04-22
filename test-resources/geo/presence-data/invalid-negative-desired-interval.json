@@ -1,0 +1,8 @@
+{
+  "type": "publisher",
+  "resolution": {
+    "accuracy": "BALANCED",
+    "desiredInterval": -1,
+    "minimumDisplacement": 10.11
+  }
+}
