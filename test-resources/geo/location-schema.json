@@ -17,7 +17,7 @@
         },
         "coordinates": {
           "type": "array",
-          "description": "A two-element tuple containing latitude and longitude",
+          "description": "A three-element tuple containing latitude and longitude and altitude",
           "items": [
             {
               "description": "Latitude",
@@ -25,6 +25,10 @@
             },
             {
               "description": "Longitude",
+              "type": "number"
+            },
+            {
+              "description": "Altitude in meters. May be positive or negative for above and below sea level measurement.",
               "type": "number"
             }
           ],
@@ -39,10 +43,6 @@
       "properties": {
         "accuracyHorizontal": {
           "description": "Object horizontal accuracy in meters.",
-          "type": "number"
-        },
-        "altitude": {
-          "description": "Object altitude in meters. May be positive or negative for above and below sea level measurement.",
           "type": "number"
         },
         "bearing": {
