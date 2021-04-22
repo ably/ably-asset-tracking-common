@@ -14,7 +14,7 @@ jsonschema.addSchema(
   'https://schemas.ably.com/json/asset-tracking-common/Location'
 );
 
-describe('Journey schema', () => {
+describe('Enhanced Location Update schema', () => {
   examples.forEach((fileName) => {
     const instance = JSON.parse(fs.readFileSync(path.resolve(exampleDir, fileName)));
 
