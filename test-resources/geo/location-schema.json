@@ -76,7 +76,7 @@
           "type": "integer"
         }
       },
-      "additionalProperties": false,
+      "additionalProperties": true,
       "required": ["time"]
     }
   },
