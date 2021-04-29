@@ -6,7 +6,7 @@
     "type": {
       "type": "string",
       "description": "The type of client in the presence channel.",
-      "enum": ["subscriber", "publisher"]
+      "enum": ["SUBSCRIBER", "PUBLISHER"]
     },
 
     "resolution": {
