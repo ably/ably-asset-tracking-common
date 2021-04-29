@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ably Asset Tracking Enhanced Location Update",
+  "id": "https://schemas.ably.com/json/asset-tracking-common/EnhancedLocationUpdate",
+  "type": "object",
+  "properties": {
+    "location": {
+      "type": "object",
+      "description": "The newest enhanced location of the publisher.",
+      "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+    },
+
+    "batteryLevel": {
+      "type": ["number", "null"],
+      "description": "The battery level of the publisher's device (between 0.0 and 100.0). Null if the data is not available.",
+      "maximum": 100.0,
+      "minimum": 0.0
+    },
+
+    "skippedLocations": {
+      "type": "array",
+      "description": "Skipped locations of the publisher since the last location update. These locations were not sent due to the active resolution.",
+      "items": {
+        "type": "object",
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+      },
+      "minLength": 0
+    },
+
+    "intermediateLocations": {
+      "type": "array",
+      "description": "Predicted locations leading up to this location update.",
+      "items": {
+        "type": "object",
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+      },
+      "minLength": 0
+    },
+
+    "type": {
+      "type": "string",
+      "description": "The type of this location update.",
+      "enum": ["PREDICTED", "ACTUAL"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["location", "batteryLevel", "skippedLocations", "intermediateLocations", "type"]
+}
