@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ably Asset Tracking Presence Data",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "The type of client in the presence channel.",
+      "enum": ["subscriber", "publisher"]
+    },
+
+    "resolution": {
+      "type": ["object", "null"],
+      "properties": {
+        "accuracy": {
+          "type": "string",
+          "description": "The accuracy of GPS engine location updates.",
+          "enum": ["MINIMUM", "LOW", "BALANCED", "HIGH", "MAXIMUM"]
+        },
+
+        "desiredInterval": {
+          "type": "number",
+          "description": "The desired interval between location updates from the publisher in milliseconds.",
+          "minimum": 0
+        },
+
+        "minimumDisplacement": {
+          "type": "number",
+          "description": "The minimum distance between location updates from the publisher in meters.",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": ["accuracy", "desiredInterval", "minimumDisplacement"]
+    }
+  },
+  "additionalProperties": false,
+  "required": ["type", "resolution"]
+}
