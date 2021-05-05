@@ -1,5 +1,5 @@
 {
-  "type": "publisher",
+  "type": "PUBLISHER",
   "resolution": {
     "accuracy": "BALANCED",
     "desiredInterval": -1,
