@@ -14,7 +14,6 @@
           "time": 2.0
         }
       },
-      "batteryLevel": 95.0,
       "skippedLocations": [],
       "intermediateLocations": [],
       "type": "ACTUAL"
@@ -37,7 +36,6 @@
           "floor": 0
         }
       },
-      "batteryLevel": 94.5,
       "skippedLocations": [],
       "intermediateLocations": [],
       "type": "ACTUAL"
