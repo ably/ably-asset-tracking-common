@@ -20,6 +20,10 @@ program.parse(process.argv);
 const opts = program.opts();
 
 const configurationData: ConfigurationFileData = getDataFromFile(opts.configuration);
+if (!configurationData.source || !configurationData.sourceCredentials || !configurationData.sourceTrackableId) {
+  console.error('You need to specify source, source credentials and source trackable ID.');
+  process.exit(1);
+}
 if (
   (configurationData.destinationCredentials && !configurationData.destinationTrackableId) ||
   (!configurationData.destinationCredentials && configurationData.destinationTrackableId)
