@@ -1,0 +1,5 @@
+/node_modules/
+.env
+
+.ably_credentials.json
+.script_configuration.json
