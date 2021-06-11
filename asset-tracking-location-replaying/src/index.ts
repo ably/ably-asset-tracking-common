@@ -3,7 +3,7 @@ import { Command } from 'commander';
 import { CHANNEL_PREFIX, CLIENT_ID, ENHANCED_LOCATION_MESSAGE, PRESENCE_DATA_PUBLISHER_TYPE } from './consts';
 import { getEnhancedLocationsFromChannelHistory } from './getDataFromChannelHistory';
 import { getDataFromFile } from './getDataFromFile';
-import { AblyCredentialsFileData, ConfigurationFileData } from './types';
+import { AblyCredentialsFileData, ConfigurationFileData, EnhancedLocationUpdate } from './types';
 import { wait } from './utils';
 const VERSION = require('../package.json').version;
 const PRESENCE_DATA = JSON.stringify({ type: PRESENCE_DATA_PUBLISHER_TYPE });
@@ -55,10 +55,10 @@ if (opts.verbose) {
   if (opts.verbose) console.log('Destination channel:', destinationChannel.name);
 
   if (opts.verbose) console.log('Downloading location data from Ably channel history...');
-  const messages = await getEnhancedLocationsFromChannelHistory(sourceChannel);
+  const locationUpdates: EnhancedLocationUpdate[] = await getEnhancedLocationsFromChannelHistory(sourceChannel);
   if (opts.verbose) {
     console.log('Location data downloaded');
-    console.log(messages);
+    console.log(locationUpdates);
   }
 
   if (opts.verbose) console.log('Entering presence...');
@@ -66,16 +66,17 @@ if (opts.verbose) {
   if (opts.verbose) console.log('Presence entered');
 
   if (opts.verbose) console.log(`Publishing location messages...`);
-  for (let i = 0; i < messages.length; i++) {
+  for (let i = 0; i < locationUpdates.length; i++) {
     console.log(`Publishing location ${i}`);
-    const message = messages[i];
-    await destinationChannel.publish(ENHANCED_LOCATION_MESSAGE, JSON.stringify(message));
-    const isLastMessage = i === messages.length - 1;
+    const locationUpdate = locationUpdates[i];
+    await destinationChannel.publish(ENHANCED_LOCATION_MESSAGE, JSON.stringify(locationUpdate));
+    const isLastMessage = i === locationUpdates.length - 1;
     if (!isLastMessage) {
-      const nextMessage = messages[i + 1];
-      const delayBetweenMessagesInSeconds = nextMessage.location.properties.time - message.location.properties.time;
-      if (opts.verbose) console.log('Delay:', delayBetweenMessagesInSeconds);
-      await wait(delayBetweenMessagesInSeconds);
+      const nextLocationUpdate = locationUpdates[i + 1];
+      const delayBetweenLocationUpdatesInSeconds =
+        nextLocationUpdate.location.properties.time - locationUpdate.location.properties.time;
+      if (opts.verbose) console.log('Delay:', delayBetweenLocationUpdatesInSeconds);
+      await wait(delayBetweenLocationUpdatesInSeconds);
     }
   }
   if (opts.verbose) console.log(`Finished publishing location messages`);
