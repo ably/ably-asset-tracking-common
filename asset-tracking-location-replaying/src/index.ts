@@ -4,7 +4,7 @@ import { CHANNEL_PREFIX, CLIENT_ID, ENHANCED_LOCATION_MESSAGE, PRESENCE_DATA_PUB
 import { getEnhancedLocationsFromChannelHistory } from './getDataFromChannelHistory';
 import { getDataFromFile } from './getDataFromFile';
 import { AblyCredentialsFileData, ConfigurationFileData, EnhancedLocationUpdate } from './types';
-import { wait } from './utils';
+import { adjustLocationTimestamps, wait } from './utils';
 const VERSION = require('../package.json').version;
 const PRESENCE_DATA = JSON.stringify({ type: PRESENCE_DATA_PUBLISHER_TYPE });
 
@@ -73,7 +73,12 @@ if (opts.verbose) {
   for (let i = 0; i < locationUpdates.length; i++) {
     console.log(`Publishing location ${i}`);
     const locationUpdate = locationUpdates[i];
-    await destinationChannel.publish(ENHANCED_LOCATION_MESSAGE, JSON.stringify(locationUpdate));
+    let messageToSend = JSON.stringify(locationUpdate);
+    if (configurationData.adjustTimestamps) {
+      messageToSend = adjustLocationTimestamps(messageToSend);
+    }
+    if (opts.verbose) console.log('Sending: ', messageToSend);
+    await destinationChannel.publish(ENHANCED_LOCATION_MESSAGE, messageToSend);
     const isLastMessage = i === locationUpdates.length - 1;
     if (!isLastMessage) {
       const nextLocationUpdate = locationUpdates[i + 1];
