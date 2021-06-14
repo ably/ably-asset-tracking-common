@@ -15,14 +15,14 @@ File format: JSON
 ```javascript
 {
   "source": "Ably", // Select the data source Ably History (or AWS S3 - TBD)
-  "sourceCredentials": "path_to_file.json", //  Path to a Ably (or AWS - TBD) credentials file for accessing the source file
+  "sourceCredentials": "path_to_file.json", //  Path to a Ably (or AWS - TBD) credentials file for accessing the data source
   "sourceTrackableId": "FIRST_ID", // Trackable ID to replay
   "destinationCredentials": "another_path_to_file.json", //  Path to a file with Ably destination credentials (optional)
   "destinationTrackableId": "SECOND_ID", //  Destination Trackable ID  (optional)
   "adjustTimestamps": true, // Amend timestamps of saved data to current time (optional)
   "loop": true, // Replay the trip data in a loop (optional)
-  "historyStartTime": 1623654722903, //Timestamp of the beginning of the replaying data (optional)
-  "historyFinishTime": 1623654743184 //Timestamp of the end of the replaying data (optional)
+  "historyStartTime": 1623654722903, // Timestamp of the beginning of the replaying data (optional)
+  "historyFinishTime": 1623654743184 // Timestamp of the end of the replaying data (optional)
 }
 ```
 
