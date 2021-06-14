@@ -5,6 +5,7 @@ import { getEnhancedLocationsFromChannelHistory } from './getDataFromChannelHist
 import { getDataFromFile } from './getDataFromFile';
 import { AblyCredentialsFileData, ConfigurationFileData, EnhancedLocationUpdate } from './types';
 import { adjustLocationTimestamps, wait } from './utils';
+const onProcessInterrupted = require('death');
 const VERSION = require('../package.json').version;
 const PRESENCE_DATA = JSON.stringify({ type: PRESENCE_DATA_PUBLISHER_TYPE });
 const LOOP_RESTART_DELAY_IN_SECONDS = 1;
@@ -67,6 +68,24 @@ if (opts.verbose) {
     : sourceChannel;
   if (opts.verbose) console.log('Destination channel:', destinationChannel.name);
 
+  const cleanupAbly = async () => {
+    if (opts.verbose) console.log('Leaving presence...');
+    await destinationChannel.presence.leave(PRESENCE_DATA);
+    if (opts.verbose) console.log('Presence left');
+
+    sourceAbly.close();
+    if (isDestinationSpecified) {
+      destinationAbly.close();
+    }
+  };
+
+  onProcessInterrupted(async (signal: any, error: any) => {
+    console.log('Script interrupt detected. Beginning cleanup...');
+    await cleanupAbly();
+    console.log('Finished cleanup');
+    process.exit(1);
+  });
+
   if (opts.verbose) console.log('Downloading location data from Ably channel history...');
   const locationUpdates: EnhancedLocationUpdate[] = await getEnhancedLocationsFromChannelHistory(
     sourceChannel,
@@ -107,14 +126,7 @@ if (opts.verbose) {
   }
   if (opts.verbose) console.log(`Finished publishing location messages`);
 
-  if (opts.verbose) console.log('Leaving presence...');
-  await destinationChannel.presence.leave(PRESENCE_DATA);
-  if (opts.verbose) console.log('Presence left');
-
-  sourceAbly.close();
-  if (isDestinationSpecified) {
-    destinationAbly.close();
-  }
+  await cleanupAbly();
 
   process.exit(0);
 })();
