@@ -26,6 +26,14 @@ if (!configurationData.source || !configurationData.sourceCredentials || !config
   process.exit(1);
 }
 if (
+  configurationData.historyStartTime &&
+  configurationData.historyFinishTime &&
+  configurationData.historyStartTime > configurationData.historyFinishTime
+) {
+  console.error('History start time cannot be later than history finish time.');
+  process.exit(1);
+}
+if (
   (configurationData.destinationCredentials && !configurationData.destinationTrackableId) ||
   (!configurationData.destinationCredentials && configurationData.destinationTrackableId)
 ) {
@@ -60,7 +68,11 @@ if (opts.verbose) {
   if (opts.verbose) console.log('Destination channel:', destinationChannel.name);
 
   if (opts.verbose) console.log('Downloading location data from Ably channel history...');
-  const locationUpdates: EnhancedLocationUpdate[] = await getEnhancedLocationsFromChannelHistory(sourceChannel);
+  const locationUpdates: EnhancedLocationUpdate[] = await getEnhancedLocationsFromChannelHistory(
+    sourceChannel,
+    configurationData.historyStartTime,
+    configurationData.historyFinishTime
+  );
   if (opts.verbose) {
     console.log('Location data downloaded');
     console.log(locationUpdates);

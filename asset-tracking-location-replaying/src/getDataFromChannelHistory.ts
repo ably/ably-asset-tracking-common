@@ -3,10 +3,25 @@ import { ENHANCED_LOCATION_MESSAGE } from './consts';
 import { EnhancedLocationUpdate } from './types';
 
 export const getEnhancedLocationsFromChannelHistory = async (
-  channel: Types.RealtimeChannelPromise
+  channel: Types.RealtimeChannelPromise,
+  historyStartTimestamp?: number,
+  historyFinishTimestamp?: number
 ): Promise<EnhancedLocationUpdate[]> => {
   const allMessages = await getAllHistoryMessages(channel);
-  return allMessages.filter((msg) => msg.name === ENHANCED_LOCATION_MESSAGE).map((msg) => JSON.parse(msg.data));
+  let enhancedLocationMessages = allMessages.filter(
+    (message: Types.Message) => message.name === ENHANCED_LOCATION_MESSAGE
+  );
+  if (historyStartTimestamp) {
+    enhancedLocationMessages = enhancedLocationMessages.filter(
+      (message: Types.Message) => message.timestamp >= historyStartTimestamp
+    );
+  }
+  if (historyFinishTimestamp) {
+    enhancedLocationMessages = enhancedLocationMessages.filter(
+      (message: Types.Message) => message.timestamp <= historyFinishTimestamp
+    );
+  }
+  return enhancedLocationMessages.map((message: Types.Message) => JSON.parse(message.data));
 };
 
 const getAllHistoryMessages = async (channel: Types.RealtimeChannelPromise): Promise<Types.Message[]> => {

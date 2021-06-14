@@ -31,6 +31,8 @@ export type ConfigurationFileData = {
   destinationTrackableId?: string;
   adjustTimestamps?: boolean;
   loop?: boolean;
+  historyStartTime?: number;
+  historyFinishTime?: number;
 };
 
 export type AblyCredentialsFileData = {
