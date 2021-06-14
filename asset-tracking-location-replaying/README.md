@@ -18,9 +18,11 @@ File format: JSON
   "sourceCredentials": "path_to_file.json", //  Path to a Ably (or AWS - TBD) credentials file for accessing the source file
   "sourceTrackableId": "FIRST_ID", // Trackable ID to replay
   "destinationCredentials": "another_path_to_file.json", //  Path to a file with Ably destination credentials (optional)
-  "destinationTrackableId": "SECOND_ID", //  Destination Trackable ID  (optional argument)
+  "destinationTrackableId": "SECOND_ID", //  Destination Trackable ID  (optional)
   "adjustTimestamps": true, // Amend timestamps of saved data to current time (optional)
-  "loop": true // Replay the trip data in a loop (optional)
+  "loop": true, // Replay the trip data in a loop (optional)
+  "historyStartTime": 1623654722903, //Timestamp of the beginning of the replaying data (optional)
+  "historyFinishTime": 1623654743184 //Timestamp of the end of the replaying data (optional)
 }
 ```
 
