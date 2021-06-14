@@ -12,7 +12,7 @@ Then you will need to create a script configuration file and a credentials confi
 
 File format: JSON
 
-```json
+```javascript
 {
   "source": "Ably", // Select the data source Ably History (or AWS S3 - TBD)
   "sourceCredentials": "path_to_file.json", //  Path to a Ably (or AWS - TBD) credentials file for accessing the source file
@@ -30,7 +30,7 @@ File format: JSON
 
 File format: JSON
 
-```json
+```javascript
 {
   "ablyApiKey": "<INSERT_ABLY_API_KEY>"
 }
