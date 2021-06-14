@@ -7,6 +7,7 @@ import { AblyCredentialsFileData, ConfigurationFileData, EnhancedLocationUpdate 
 import { adjustLocationTimestamps, wait } from './utils';
 const VERSION = require('../package.json').version;
 const PRESENCE_DATA = JSON.stringify({ type: PRESENCE_DATA_PUBLISHER_TYPE });
+const LOOP_RESTART_DELAY_IN_SECONDS = 1;
 
 const program = new Command();
 
@@ -86,6 +87,10 @@ if (opts.verbose) {
         nextLocationUpdate.location.properties.time - locationUpdate.location.properties.time;
       if (opts.verbose) console.log('Delay:', delayBetweenLocationUpdatesInSeconds);
       await wait(delayBetweenLocationUpdatesInSeconds);
+    } else if (isLastMessage && configurationData.loop) {
+      if (opts.verbose) console.log('Looping events. Delay:', LOOP_RESTART_DELAY_IN_SECONDS);
+      await wait(LOOP_RESTART_DELAY_IN_SECONDS);
+      i = -1; // at the end of this block it will be incremented to 0 and restart the for loop
     }
   }
   if (opts.verbose) console.log(`Finished publishing location messages`);
