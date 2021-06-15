@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import * as Ably from 'ably/promises';
 import { Command } from 'commander';
 import { CHANNEL_PREFIX, CLIENT_ID, ENHANCED_LOCATION_MESSAGE, PRESENCE_DATA_PUBLISHER_TYPE } from './consts';

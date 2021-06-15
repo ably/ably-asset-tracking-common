@@ -4,7 +4,8 @@
   "description": "CLI tool that replays location updates",
   "main": "index.ts",
   "scripts": {
-    "start": "./node_modules/ts-node/dist/bin.js src/index.ts"
+    "start": "./node_modules/ts-node/dist/bin.js src/index.ts",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
   },
   "devDependencies": {
     "@types/node": "^15.12.2"
+  },
+  "bin": {
+    "asset-tracking-location-replaying": "./lib/index.js"
   }
 }
