@@ -44,7 +44,7 @@ File format: JSON
 You can run the asset-tracking-location-replaying using `npm start --` with mandatory configuration file and other optional script arguments provided after `--`.
 Example usage: `npm start -- --configuration my_configuration.json`.
 
-You can also separately build the script with `npm run build` and then use node with the `./lib/index.js` file to run it.
-Example usage `npm run build && node ./lib/index.js --configuration my_configuration.json`
+You can also use node with the `./lib/index.js` file to run it.
+Example usage `node ./lib/index.js --configuration my_configuration.json`
 
 Use the `--help` flag to see a list of available options.
