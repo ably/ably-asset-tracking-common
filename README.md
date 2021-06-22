@@ -47,7 +47,7 @@ git submodule add git@github.com:ably/ably-asset-tracking-common.git external/co
 The downstream repositories are:
 
 - [ably-asset-tracking-android](https://github.com/ably/ably-asset-tracking-android): SDKs for Android
-- [ably-asset-tracking-cocoa](https://github.com/ably/ably-asset-tracking-cocoa): SDKs for iOS
+- [ably-asset-tracking-swift](https://github.com/ably/ably-asset-tracking-swift): SDKs for iOS
 - [ably-asset-tracking-js](https://github.com/ably/ably-asset-tracking-js): SDK for Web Browsers (JavaScript)
 
 
