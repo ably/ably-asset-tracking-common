@@ -1,0 +1,25 @@
+{
+  "name": "asset-tracking-location-replaying",
+  "version": "1.0.0",
+  "description": "CLI tool that replays location updates",
+  "main": "index.ts",
+  "scripts": {
+    "start": "node ./lib/index.js",
+    "build": "tsc -p ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ably": "^1.2.4",
+    "commander": "^7.0.0",
+    "death": "^1.1.0",
+    "typescript": "^4.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2"
+  },
+  "bin": {
+    "asset-tracking-location-replaying": "./lib/index.js"
+  }
+}
