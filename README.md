@@ -4,7 +4,7 @@
 
 ## Overview
 
-Ably Asset Tracking SDKs provide an easy way to track multiple assets with realtime location updates powered by [Ably](https://ably.io/) realtime network and Mapbox [Navigation SDK](https://docs.mapbox.com/android/navigation/overview/) with location enhancement.
+Ably Asset Tracking SDKs provide an easy way to track multiple assets with realtime location updates powered by [Ably](https://ably.com/) realtime network and Mapbox [Navigation SDK](https://docs.mapbox.com/android/navigation/overview/) with location enhancement.
 
 This repository provides a home for resources which need to be shared by multiple parts of the Ably Asset Tracking ecosystem, for example to store resources usable across multiple platforms.
 
@@ -17,6 +17,16 @@ Ably Asset Tracking is:
     - passing to a 3rd party system
     - persistence for later retrieval
 - **built for purpose** - the APIs and underlying functionality are designed specifically to meet the requirements of a range of common asset tracking use-cases
+
+### Documentation
+
+Visit the [Ably Asset Tracking](https://ably.com/documentation/asset-tracking) documentation for a complete API reference and code examples.
+
+###  Further Reading
+
+- [Introducing Ably Asset Tracking - public beta now available](https://ably.com/blog/ably-asset-tracking-beta)
+- [Accurate Delivery Tracking with Navigation SDK + Ably Realtime Network](https://www.mapbox.com/blog/accurate-delivery-tracking)
+
 
 ## Validation of Resources
 
@@ -39,3 +49,6 @@ The downstream repositories are:
 - [ably-asset-tracking-android](https://github.com/ably/ably-asset-tracking-android): SDKs for Android
 - [ably-asset-tracking-swift](https://github.com/ably/ably-asset-tracking-swift): SDKs for iOS
 - [ably-asset-tracking-js](https://github.com/ably/ably-asset-tracking-js): SDK for Web Browsers (JavaScript)
+
+
+
