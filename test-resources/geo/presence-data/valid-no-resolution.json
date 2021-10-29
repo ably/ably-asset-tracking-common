@@ -1,4 +1,5 @@
 {
   "type": "PUBLISHER",
-  "resolution": null
+  "resolution": null,
+  "rawLocations": true
 }
