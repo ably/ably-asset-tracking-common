@@ -11,27 +11,8 @@
 
     "resolution": {
       "type": ["object", "null"],
-      "properties": {
-        "accuracy": {
-          "type": "string",
-          "description": "The accuracy of GPS engine location updates.",
-          "enum": ["MINIMUM", "LOW", "BALANCED", "HIGH", "MAXIMUM"]
-        },
-
-        "desiredInterval": {
-          "type": "number",
-          "description": "The desired interval between location updates from the publisher in milliseconds.",
-          "minimum": 0
-        },
-
-        "minimumDisplacement": {
-          "type": "number",
-          "description": "The minimum distance between location updates from the publisher in meters.",
-          "minimum": 0
-        }
-      },
-      "additionalProperties": false,
-      "required": ["accuracy", "desiredInterval", "minimumDisplacement"]
+      "description": "The resolution requested by the subscriber.",
+      "$ref": "https://schemas.ably.com/json/asset-tracking-common/Resolution"
     },
 
     "rawLocations": {
