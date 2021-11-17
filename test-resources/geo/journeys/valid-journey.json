@@ -15,6 +15,7 @@
         }
       },
       "skippedLocations": [],
+      "resolution": null,
       "intermediateLocations": [],
       "type": "ACTUAL"
     },
@@ -37,6 +38,7 @@
         }
       },
       "skippedLocations": [],
+      "resolution": null,
       "intermediateLocations": [],
       "type": "ACTUAL"
     }

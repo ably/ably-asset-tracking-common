@@ -13,6 +13,10 @@ jsonschema.addSchema(
   JSON.parse(fs.readFileSync(path.resolve(geoDir, 'location-schema.json'))),
   'https://schemas.ably.com/json/asset-tracking-common/Location'
 );
+jsonschema.addSchema(
+  JSON.parse(fs.readFileSync(path.resolve(geoDir, 'resolution-schema.json'))),
+  'https://schemas.ably.com/json/asset-tracking-common/Resolution'
+);
 
 describe('Raw Location Update schema', () => {
   examples.forEach((fileName) => {

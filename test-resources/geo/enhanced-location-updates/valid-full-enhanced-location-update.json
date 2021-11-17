@@ -27,6 +27,11 @@
       }
     }
   ],
+  "resolution": {
+    "accuracy": "BALANCED",
+    "desiredInterval": 1234,
+    "minimumDisplacement": 10.11
+  },
   "intermediateLocations": [
     {
       "type": "Feature",

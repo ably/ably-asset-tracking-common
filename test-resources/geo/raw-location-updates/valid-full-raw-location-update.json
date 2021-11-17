@@ -26,5 +26,10 @@
         "time": 2.0
       }
     }
-  ]
+  ],
+  "resolution": {
+    "accuracy": "BALANCED",
+    "desiredInterval": 1234,
+    "minimumDisplacement": 10.11
+  }
 }

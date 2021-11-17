@@ -18,6 +18,12 @@
         "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
       },
       "minLength": 0
+    },
+
+    "resolution": {
+      "type": ["object", "null"],
+      "description": "The resolution currently used by the publisher for the given trackable.",
+      "$ref": "https://schemas.ably.com/json/asset-tracking-common/Resolution"
     }
   },
   "additionalProperties": false,

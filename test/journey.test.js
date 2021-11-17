@@ -14,6 +14,10 @@ jsonschema.addSchema(
   'https://schemas.ably.com/json/asset-tracking-common/Location'
 );
 jsonschema.addSchema(
+  JSON.parse(fs.readFileSync(path.resolve(geoDir, 'resolution-schema.json'))),
+  'https://schemas.ably.com/json/asset-tracking-common/Resolution'
+);
+jsonschema.addSchema(
   JSON.parse(fs.readFileSync(path.resolve(geoDir, 'enhanced-location-update-schema.json'))),
   'https://schemas.ably.com/json/asset-tracking-common/EnhancedLocationUpdate'
 );
