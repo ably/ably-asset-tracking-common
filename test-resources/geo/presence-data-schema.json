@@ -36,7 +36,7 @@
 
     "rawLocations": {
       "type": ["boolean", "null"],
-      "description": "Informs if publisher is also publishing raw locations."
+      "description": "Informs if publisher is also publishing raw locations. As this schema is used for both publisher and subscriber this value can be null which should be treated as false."
     }
   },
   "additionalProperties": false,
