@@ -4,5 +4,6 @@
     "accuracy": "BEST",
     "desiredInterval": 1234,
     "minimumDisplacement": 10.11
-  }
+  },
+  "rawLocations": null
 }

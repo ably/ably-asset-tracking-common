@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Ably Asset Tracking Raw Location Update",
+  "id": "https://schemas.ably.com/json/asset-tracking-common/RawLocationUpdate",
+  "type": "object",
+  "properties": {
+    "location": {
+      "type": "object",
+      "description": "The newest raw location of the publisher.",
+      "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+    },
+
+    "skippedLocations": {
+      "type": "array",
+      "description": "Skipped locations of the publisher since the last location update. These locations were not sent due to the active resolution or connection issues.",
+      "items": {
+        "type": "object",
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+      },
+      "minLength": 0
+    }
+  },
+  "additionalProperties": false,
+  "required": ["location", "skippedLocations"]
+}

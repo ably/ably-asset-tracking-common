@@ -2,8 +2,8 @@
   "type": "PUBLISHER",
   "resolution": {
     "accuracy": "BALANCED",
-    "desiredInterval": 123,
-    "minimumDisplacement": -1.0
+    "desiredInterval": 1234,
+    "minimumDisplacement": 10.11
   },
   "rawLocations": null
 }
