@@ -11,6 +11,7 @@
 
     "resolution": {
       "type": ["object", "null"],
+      "description": "If the type is SUBSCRIBER then this is the subscriber's requested resolution. If the type is PUBLISHER then this is the resolution calculated and used by the publisher.",
       "properties": {
         "accuracy": {
           "type": "string",
