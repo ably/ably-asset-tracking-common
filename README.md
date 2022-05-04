@@ -20,7 +20,7 @@ Ably Asset Tracking is:
 
 ### Documentation
 
-Visit the [Ably Asset Tracking](https://ably.com/documentation/asset-tracking) documentation for a complete API reference and code examples.
+Visit the [Ably Asset Tracking](https://ably.com/docs/asset-tracking) documentation for a complete API reference and code examples.
 
 ###  Further Reading
 
