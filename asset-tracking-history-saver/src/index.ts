@@ -51,13 +51,13 @@ if (opts.verbose) {
   let sourceChannel = sourceAbly.channels.get(`${CHANNEL_PREFIX}${configurationData.sourceTrackableId}`);
   if (opts.verbose) console.log('Source channel:', sourceChannel.name);
 
-  const cleanupAbly = async () => {
+  const cleanupAbly = () => {
     sourceAbly.close();
   };
 
   onProcessInterrupted(async (signal: any) => {
     console.log('Script interrupt detected. Beginning cleanup...');
-    await cleanupAbly();
+    cleanupAbly();
     console.log('Finished cleanup');
     process.exit(1);
   });
@@ -76,7 +76,7 @@ if (opts.verbose) {
   saveDataToFile(configurationData.destinationFile, locationUpdates);
   if (opts.verbose) console.log(`Finished saving location messages`);
 
-  await cleanupAbly();
+  cleanupAbly();
 
   process.exit(0);
 })();
