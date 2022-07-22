@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document is meant to be a formal, canonical specification describing the Ably Asset Tracking solution.
+This document is the formal, canonical specification describing the ecosystem, including requirements, shared by components of Ably's [Asset Tracking solution](https://ably.com/solutions/asset-tracking) (AAT).
 
 ## Error codes
 
