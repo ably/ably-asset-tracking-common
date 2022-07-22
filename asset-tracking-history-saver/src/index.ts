@@ -6,7 +6,7 @@ import { getEnhancedLocationsFromChannelHistory } from './getDataFromChannelHist
 import { getDataFromFile } from './getDataFromFile';
 import { saveDataToFile } from './saveDataToFile';
 import { AblyCredentialsFileData, ConfigurationFileData, EnhancedLocationUpdate } from './types';
-const onProcessInterrupted = require('death');
+import onProcessInterrupted from 'death';
 const VERSION = require('../package.json').version;
 
 const program = new Command();
@@ -55,7 +55,7 @@ if (opts.verbose) {
     sourceAbly.close();
   };
 
-  onProcessInterrupted(async (signal: any, error: any) => {
+  onProcessInterrupted(async (signal: any) => {
     console.log('Script interrupt detected. Beginning cleanup...');
     await cleanupAbly();
     console.log('Finished cleanup');
