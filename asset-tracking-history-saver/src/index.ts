@@ -27,7 +27,7 @@ if (
   !configurationData.destinationFile
 ) {
   console.error('You need to specify source credentials, source trackable ID and destination file path.');
-  process.exit(1);
+  throw Error('You need to specify source credentials, source trackable ID and destination file path.');
 }
 if (
   configurationData.historyStartTime &&
@@ -35,7 +35,7 @@ if (
   configurationData.historyStartTime > configurationData.historyFinishTime
 ) {
   console.error('History start time cannot be later than history finish time.');
-  process.exit(1);
+  throw Error('History start time cannot be later than history finish time.');
 }
 const sourceCredentialsData: AblyCredentialsFileData = getDataFromFile(configurationData.sourceCredentials);
 
