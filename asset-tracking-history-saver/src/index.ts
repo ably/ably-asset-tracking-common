@@ -77,6 +77,4 @@ if (opts.verbose) {
   if (opts.verbose) console.log(`Finished saving location messages`);
 
   cleanupAbly();
-
-  process.exit(0);
 })();
