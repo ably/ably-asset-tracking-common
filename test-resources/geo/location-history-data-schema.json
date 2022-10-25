@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ably Asset Tracking Location History Data",
+  "description": "Describes a sequence of locations over time, as recorded by the Ably Asset Tracking Publisher SDK.",
+  "id": "https://schemas.ably.com/json/asset-tracking-common/LocationHistoryData",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "events": {
+      "type": "array",
+      "description": "A sequence of locations over time, as recorded by the Publisher SDK.",
+      "items": {
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+      }
+    }
+  }
+}
