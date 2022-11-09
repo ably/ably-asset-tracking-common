@@ -10,6 +10,11 @@
       "type": "string",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
     },
+    "agents": {
+      "type": "string",
+      "description": "A library identifier used to identify the version of the Ably Asset Tracking Publisher SDK that generated this location history data, as well as any other relevant software components in use. Its format should be that of the Agent library identifier described in point RSC7d1 of the Ably client libraries feature specification.",
+      "examples": ["ably-cocoa/1.2.16 ably-asset-tracking-swift/1.0.0-rc.1 iOS/16.1.0"]
+    },
     "events": {
       "type": "array",
       "description": "A sequence of locations over time, as recorded by the Publisher SDK.",
@@ -18,5 +23,5 @@
       }
     }
   },
-  "required": ["version", "events"]
+  "required": ["version", "agents", "events"]
 }
