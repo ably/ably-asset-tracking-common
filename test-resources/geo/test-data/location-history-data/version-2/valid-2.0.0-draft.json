@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0-draft",
+  "events": [
+    {
+      "geometry": {
+        "coordinates": [-23.593555940022192, -46.65957943651529, 5],
+        "type": "Point"
+      },
+      "properties": {
+        "accuracyHorizontal": 20,
+        "bearing": 0,
+        "speed": 0,
+        "time": 1666166854.53462
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [-23.593585393136074, -46.659666021490466, 5],
+        "type": "Point"
+      },
+      "properties": {
+        "accuracyHorizontal": 20,
+        "bearing": 0,
+        "speed": 0,
+        "time": 1666166854.5825229
+      },
+      "type": "Feature"
+    }
+  ]
+}
