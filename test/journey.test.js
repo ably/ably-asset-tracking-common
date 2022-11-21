@@ -6,7 +6,7 @@ const { Validator } = require('jsonschema');
 const geoDir = path.resolve(__dirname, '..', 'test-resources', 'geo');
 const testDataDir = path.resolve(geoDir, 'test-data');
 const exampleDir = path.resolve(testDataDir, 'journeys');
-const examples = fs.readdirSync(exampleDir);
+const examples = fs.readdirSync(exampleDir).filter((fileName) => fileName.endsWith('.json'));
 const schemasDir = path.resolve(geoDir, 'schemas');
 const schema = require(path.resolve(schemasDir, 'journey.json'));
 
