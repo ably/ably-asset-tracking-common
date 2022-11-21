@@ -16,7 +16,6 @@ jsonschema.addSchema(
 
 describe('Location history data schema', () => {
   examples.forEach((fileName) => {
-    console.log(`filename ${fileName}`);
     const instance = JSON.parse(fs.readFileSync(path.resolve(exampleDir, fileName)));
 
     it(fileName, () => {
