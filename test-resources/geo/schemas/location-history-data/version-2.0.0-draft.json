@@ -17,5 +17,6 @@
         "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
       }
     }
-  }
+  },
+  "required": ["version", "events"]
 }
