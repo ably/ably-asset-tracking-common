@@ -4,9 +4,11 @@ const path = require('path');
 const jsonschema = require('jsonschema');
 
 const geoDir = path.resolve(__dirname, '..', 'test-resources', 'geo');
-const exampleDir = path.resolve(geoDir, 'locations');
-const examples = fs.readdirSync(exampleDir);
-const schema = require(path.resolve(geoDir, 'location-schema.json'));
+const testDataDir = path.resolve(geoDir, 'test-data');
+const exampleDir = path.resolve(testDataDir, 'locations');
+const examples = fs.readdirSync(exampleDir).filter((fileName) => fileName.endsWith('.json'));
+const schemasDir = path.resolve(geoDir, 'schemas');
+const schema = require(path.resolve(schemasDir, 'location.json'));
 
 describe('Location schema', () => {
   examples.forEach((fileName) => {

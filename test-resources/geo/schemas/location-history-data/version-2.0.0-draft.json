@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Ably Asset Tracking Location History Data",
+  "description": "Describes a sequence of locations over time, as recorded by the Ably Asset Tracking Publisher SDK.",
+  "id": "https://schemas.ably.com/json/asset-tracking-common/LocationHistoryData",
+  "type": "object",
+  "properties": {
+    "version": {
+      "description": "A Semantic Versioning 2.0.0 version number, describing a version of the Location History Data JSON schema that this object validates against.",
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "events": {
+      "type": "array",
+      "description": "A sequence of locations over time, as recorded by the Publisher SDK.",
+      "items": {
+        "$ref": "https://schemas.ably.com/json/asset-tracking-common/Location"
+      }
+    }
+  },
+  "required": ["version", "events"]
+}

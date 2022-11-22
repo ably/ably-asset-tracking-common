@@ -4,17 +4,19 @@ const path = require('path');
 const { Validator } = require('jsonschema');
 
 const geoDir = path.resolve(__dirname, '..', 'test-resources', 'geo');
-const exampleDir = path.resolve(geoDir, 'journeys');
-const examples = fs.readdirSync(exampleDir);
-const schema = require(path.resolve(geoDir, 'journey-schema.json'));
+const testDataDir = path.resolve(geoDir, 'test-data');
+const exampleDir = path.resolve(testDataDir, 'journeys');
+const examples = fs.readdirSync(exampleDir).filter((fileName) => fileName.endsWith('.json'));
+const schemasDir = path.resolve(geoDir, 'schemas');
+const schema = require(path.resolve(schemasDir, 'journey.json'));
 
 const jsonschema = new Validator();
 jsonschema.addSchema(
-  JSON.parse(fs.readFileSync(path.resolve(geoDir, 'location-schema.json'))),
+  JSON.parse(fs.readFileSync(path.resolve(schemasDir, 'location.json'))),
   'https://schemas.ably.com/json/asset-tracking-common/Location'
 );
 jsonschema.addSchema(
-  JSON.parse(fs.readFileSync(path.resolve(geoDir, 'enhanced-location-update-schema.json'))),
+  JSON.parse(fs.readFileSync(path.resolve(schemasDir, 'enhanced-location-update.json'))),
   'https://schemas.ably.com/json/asset-tracking-common/EnhancedLocationUpdate'
 );
 
