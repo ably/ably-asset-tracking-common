@@ -1,5 +1,6 @@
 {
-  "version": "2.0.0-draft",
+  "version": "2.0.0",
+  "agents": "ably-cocoa/1.2.16 ably-asset-tracking-swift/1.0.0-rc.1 iOS/16.1.0",
   "events": [
     {
       "geometry": {
