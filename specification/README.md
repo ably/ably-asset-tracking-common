@@ -13,3 +13,8 @@ The list of Ably Asset Tracking specific error codes.
 | 100001 | Invalid message | The SDK received a message in an unexpected format. This is treated as a fatal protocol error and the transport will be closed with a failure. |
 | 100002 | Fetching auth token error | The SDK was unable to fetch an auth token. The automatic retry mechanism won't be stopped.  |
 | 100003 | Non retriable auth token error | The SDK was unable to fetch an auth token and won't try to fetch it again automatically. |
+
+## Default resolution policy diagram
+
+In this folder you can find the `resolution_policy_diagram.svg` file containing the default resolution policy diagram. It explains how the default resolution policy works, how each resolution is calculated and what triggers its recalculation. 
+Additionally, the `resolution_policy_diagram.drawio` file contains the source code for this diagram and can be edited in the [draw.io tool](https://draw.io) if the implementation changes in the future.
