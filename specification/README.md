@@ -16,5 +16,5 @@ The list of Ably Asset Tracking specific error codes.
 
 ## Default resolution policy diagram
 
-In this folder you can find the `resolution_policy_diagram.svg` file containing the default resolution policy diagram. It explains how the default resolution policy works, how each resolution is calculated and what triggers its recalculation. 
-Additionally, the `resolution_policy_diagram.drawio` file contains the source code for this diagram and can be edited in the [draw.io tool](https://draw.io) if the implementation changes in the future.
+In this folder you can find the [`resolution_policy_diagram.svg`](resolution_policy_diagram.svg) file containing the default resolution policy diagram. It explains how the default resolution policy works, how each resolution is calculated and what triggers its recalculation. 
+Additionally, the [`resolution_policy_diagram.drawio`](resolution_policy_diagram.drawio) file contains the source code for this diagram and can be edited in the [draw.io tool](https://draw.io) if the implementation changes in the future.
