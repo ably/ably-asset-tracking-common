@@ -18,3 +18,16 @@ The list of Ably Asset Tracking specific error codes.
 
 In this folder you can find the [`resolution_policy_diagram.svg`](resolution_policy_diagram.svg) file containing the default resolution policy diagram. It explains how the default resolution policy works, how each resolution is calculated and what triggers its recalculation. 
 Additionally, the [`resolution_policy_diagram.drawio`](resolution_policy_diagram.drawio) file contains the source code for this diagram and can be edited in the [draw.io tool](https://draw.io) if the implementation changes in the future.
+
+## Sending and receiving data
+
+### Channel name
+
+AAT uses Ably channels to send and receive location updates and other information. The channel name is created by prefixing a trackable ID with the `tracking:` namespace.
+For example, trackable with ID `1234` will use `tracking:1234` channel to send and receive data.
+
+### Data format
+
+All data schemas are stored in the JSON Schema format in the [schemas](/test-resources/geo/schemas/) directory.
+AAT sends two types of location updates: [raw](/test-resources/geo/schemas/raw-location-update.json) and [enhanced](/test-resources/geo/schemas/enhanced-location-update.json) ones.
+The [locations](/test-resources/geo/schemas/location.json) are sent in the [GeoJSON](https://geojson.org/) format. 
