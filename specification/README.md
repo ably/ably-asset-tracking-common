@@ -73,5 +73,5 @@ If you need to access or modify the state after some async operation completes t
 The only exception to the rule that asynchronous operations shouldn't block the queue is when the queue is being stopped.
 If we wanted to wait for async operations after the queue stop operation was started we would have to introduce some kind of "stopping" state.
 In this state the queue would not be stopped yet but it won't process any work as well since it is being stopped.
-Instead when the queue is being stopped, the work is allowed to block the queue and wait for any async operations required to properly stop the SDK.
+Instead when the queue is being stopped, the work responsible for stopping is allowed to block the queue and wait for any async operations required to properly stop the SDK.
 Thanks to this, no work except for the stopping work is being processed and once the stopping finishes we set the state to "stopped" and all other work that had been queued while stopping was in progress will now be discarded.
