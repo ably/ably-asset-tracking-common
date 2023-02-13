@@ -1,0 +1,22 @@
+/* Construct subgraph reachable from node ARGV[0] by forward edges
+ *
+ * Taken from https://forum.graphviz.org/t/print-only-specified-node-and-its-dependencies-from-large-graph/1011/4
+ *
+ * Usage: gvpr -f subgraph.gvpr -a addTrackable publisher.dot
+ */
+
+BEG_G {
+    node_t r = node($, ARGV[0]);
+
+    $tvroot = r;
+    $tvtype = TV_fwd;
+}
+
+N {
+    $tvroot = NULL;
+    subnode($T, $);
+}
+
+E {
+    subedge($T, $);
+}
