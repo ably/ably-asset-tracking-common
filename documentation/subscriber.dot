@@ -1,0 +1,90 @@
+digraph {
+  subgraph workers {
+    label = "Workers";
+    node [style=filled, color=blue, fontcolor=white];
+
+    // This is a list of all of the workers in the subscriber SDK
+    ChangeResolution;
+    Disconnect;
+    ProcessInitialPresenceMessages;
+    StartConnection;
+    StopConnection;
+    SubscribeForPresenceMessages;
+    SubscribeToChannel;
+    UpdateChannelConnectionState;
+    UpdateConnectionState;
+    UpdatePublisherPresence;
+  }
+
+  // Workers posted by workers
+
+  ProcessInitialPresenceMessages -> SubscribeToChannel;
+
+  StartConnection -> SubscribeForPresenceMessages;
+
+  SubscribeForPresenceMessages -> Disconnect;
+  SubscribeForPresenceMessages -> ProcessInitialPresenceMessages;
+  SubscribeForPresenceMessages -> UpdatePublisherPresence;
+
+  // Ably wrapper methods called by workers
+
+  subgraph ably_wrapper {
+    label = "Ably wrapper";
+    node [style=filled, color=yellow];
+
+    close;
+    connect;
+    disconnect;
+    enterChannelPresence;
+    getCurrentPresence;
+    startConnection;
+    subscribeForPresenceMessages;
+    updatePresenceData;
+  }
+
+  ChangeResolution -> updatePresenceData;
+
+  Disconnect -> disconnect;
+
+  StartConnection -> connect;
+  StartConnection -> enterChannelPresence;
+  StartConnection -> startConnection;
+
+  StopConnection -> close;
+
+  SubscribeForPresenceMessages -> getCurrentPresence;
+  SubscribeForPresenceMessages -> subscribeForPresenceMessages;
+
+  // SubscriberInteractor methods called by workers
+
+  subgraph CoreSubscriber_SubscriberInteractor {
+    label = "CoreSubscriber’s implementation of SubscriberInteractor"
+    node [style=filled, color=purple, fontcolor=white];
+
+    notifyAssetIsOffline;
+    subscribeForChannelState;
+    subscribeForEnhancedEvents;
+    subscribeForRawEvents;
+  }
+
+  StopConnection -> notifyAssetIsOffline;
+
+  SubscribeToChannel -> subscribeForChannelState;
+  SubscribeToChannel -> subscribeForEnhancedEvents;
+  SubscribeToChannel -> subscribeForRawEvents;
+
+  // CoreSubscriber enqueued workers
+
+  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
+
+  subgraph CoreSubscriber_public_methods {
+    label = "CoreSubscriber public methods";
+    node [style=filled, color=red];
+
+    init;
+  }
+
+  init -> UpdateConnectionState
+
+  subscribeForChannelState -> UpdateChannelConnectionState
+}

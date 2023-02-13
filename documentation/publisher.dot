@@ -1,0 +1,265 @@
+digraph {
+  subgraph workers {
+    label = "Workers";
+    node [style=filled, color=blue, fontcolor=white];
+
+    // This is a list of all of the workers in the publisher SDK
+    AblyConnectionStateChange;
+    AddTrackable;
+    ChangeLocationEngineResolution;
+    ChangeRoutingProfile;
+    ChannelConnectionStateChange;
+    ConnectionReady;
+    DestinationSet;
+    DisconnectSuccess;
+    EnhancedLocationChanged;
+    EnterPresence;
+    EnterPresenceSuccess;
+    FailTrackable;
+    PresenceMessage;
+    RawLocationChanged;
+    RefreshResolutionPolicy;
+    RemoveTrackable;
+    RetryEnterPresence;
+    SendEnhancedLocationFailure;
+    SendEnhancedLocationSuccess;
+    SendRawLocationFailure;
+    SendRawLocationSuccess;
+    SetActiveTrackable;
+    Stop;
+    StoppingConnectionFinished;
+    SubscribeToPresence;
+    SubscribeToPresenceSuccess;
+    TrackableRemovalRequested;
+    TrackableRemovalSuccess;
+    UpdatePresenceData;
+  }
+
+  // Worker equivalence
+
+  RetryEnterPresence -> EnterPresence [label = "WorkerFactory resolves specification to"];
+
+  // Workers posted by workers
+
+  AddTrackable -> AddTrackable;
+  AddTrackable -> ConnectionReady;
+  AddTrackable -> EnterPresence;
+  AddTrackable -> FailTrackable;
+  AddTrackable -> SubscribeToPresence;
+
+  ConnectionReady -> FailTrackable;
+  ConnectionReady -> TrackableRemovalRequested;
+  // Via the channelStateChangeListener that addTrackable passes to AddTrackable
+  ConnectionReady -> ChannelConnectionStateChange;
+
+  DisconnectSuccess -> StoppingConnectionFinished;
+  DisconnectSuccess -> TrackableRemovalSuccess;
+
+  EnterPresence -> EnterPresenceSuccess;
+  EnterPresence -> FailTrackable;
+  EnterPresence -> RetryEnterPresence;
+
+  RemoveTrackable -> ChangeLocationEngineResolution;
+  RemoveTrackable -> DisconnectSuccess;
+
+  SubscribeToPresence -> SubscribeToPresence;
+  SubscribeToPresence -> SubscribeToPresenceSuccess;
+  // Via the presenceUpdateListener that addTrackable passes to AddTrackable
+  SubscribeToPresence -> PresenceMessage;
+
+  TrackableRemovalRequested -> StoppingConnectionFinished;
+  TrackableRemovalRequested -> TrackableRemovalSuccess;
+
+  // Ably wrapper methods called by workers
+
+  subgraph ably_wrapper {
+    label = "Ably wrapper";
+    node [style=filled, color=yellow];
+
+    close;
+    connect;
+    disconnect;
+    enterChannelPresence;
+    startConnection;
+    stopConnection;
+    subscribeForChannelStateChange;
+    subscribeForPresenceMessages;
+    updatePresenceData;
+    waitForChannelToAttach;
+  }
+
+  AddTrackable -> connect;
+  AddTrackable -> startConnection;
+
+  ConnectionReady -> disconnect;
+  ConnectionReady -> subscribeForChannelStateChange;
+
+  DisconnectSuccess -> stopConnection;
+
+  EnterPresence -> enterChannelPresence;
+  EnterPresence -> waitForChannelToAttach;
+
+  FailTrackable -> disconnect;
+
+  RemoveTrackable -> disconnect;
+
+  Stop -> close;
+
+  SubscribeToPresence -> subscribeForPresenceMessages;
+  SubscribeToPresence -> waitForChannelToAttach;
+
+  TrackableRemovalRequested -> stopConnection;
+
+  UpdatePresenceData -> updatePresenceData;
+  UpdatePresenceData -> waitForChannelToAttach;
+
+  // PublisherInteractor methods called by workers
+
+  subgraph CorePublisher_PublisherInteractor {
+    label = "CorePublisher’s implementation of PublisherInteractor";
+    node [style=filled, color=purple, fontcolor=white];
+
+    addSubscriber;
+    checkThreshold;
+    closeMapbox;
+    notifyResolutionPolicyThatActiveTrackableHasChanged;
+    notifyResolutionPolicyThatTrackableWasRemoved;
+    processEnhancedLocationUpdate;
+    processNextWaitingEnhancedLocationUpdate;
+    processNextWaitingRawLocationUpdate;
+    processRawLocationUpdate;
+    removeAllSubscribers;
+    removeCurrentDestination;
+    removeSubscriber;
+    resolveResolution;
+    retrySendingEnhancedLocation;
+    retrySendingRawLocation;
+    saveEnhancedLocationForFurtherSending;
+    saveRawLocationForFurtherSending;
+    setDestination;
+    setFinalTrackableState;
+    startLocationUpdates;
+    stopLocationUpdates;
+    updateLocations;
+    updateSubscriber;
+    updateTrackableState;
+    updateTrackableStateFlows;
+    updateTrackables;
+  }
+
+  AblyConnectionStateChange -> updateTrackableState;
+
+  AddTrackable -> updateTrackableStateFlows;
+  AddTrackable -> updateTrackables;
+
+  ChangeRoutingProfile -> setDestination;
+
+  ChannelConnectionStateChange -> updateTrackableState;
+
+  ConnectionReady -> startLocationUpdates;
+
+  DisconnectSuccess -> notifyResolutionPolicyThatActiveTrackableHasChanged;
+  DisconnectSuccess -> notifyResolutionPolicyThatTrackableWasRemoved;
+  DisconnectSuccess -> removeAllSubscribers;
+  DisconnectSuccess -> removeCurrentDestination;
+  DisconnectSuccess -> stopLocationUpdates;
+  DisconnectSuccess -> updateTrackableStateFlows;
+  DisconnectSuccess -> updateTrackables;
+
+  EnhancedLocationChanged -> checkThreshold;
+  EnhancedLocationChanged -> processEnhancedLocationUpdate;
+  EnhancedLocationChanged -> updateLocations;
+
+  EnterPresenceSuccess -> resolveResolution;
+  EnterPresenceSuccess -> updateTrackableState;
+
+  FailTrackable -> setFinalTrackableState;
+
+  PresenceMessage -> addSubscriber;
+  PresenceMessage -> removeSubscriber;
+  PresenceMessage -> updateSubscriber;
+
+  RawLocationChanged -> processRawLocationUpdate;
+
+  RefreshResolutionPolicy -> resolveResolution;
+
+  RemoveTrackable -> setFinalTrackableState;
+  RemoveTrackable -> updateTrackableStateFlows;
+
+  SendEnhancedLocationFailure -> processNextWaitingEnhancedLocationUpdate;
+  SendEnhancedLocationFailure -> retrySendingEnhancedLocation;
+  SendEnhancedLocationFailure -> saveEnhancedLocationForFurtherSending;
+
+  SendEnhancedLocationSuccess -> processNextWaitingEnhancedLocationUpdate;
+  SendEnhancedLocationSuccess -> updateTrackableState;
+
+  SendRawLocationFailure -> processNextWaitingRawLocationUpdate;
+  SendRawLocationFailure -> retrySendingRawLocation;
+  SendRawLocationFailure -> saveRawLocationForFurtherSending;
+
+  SendRawLocationSuccess -> processNextWaitingRawLocationUpdate;
+
+  SetActiveTrackable -> removeCurrentDestination;
+  SetActiveTrackable -> setDestination;
+
+  Stop -> closeMapbox;
+  Stop -> stopLocationUpdates;
+
+  SubscribeToPresenceSuccess -> updateTrackableState;
+
+  // CorePublisher enqueued workers
+
+  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
+
+  subgraph CorePublisher_public_methods {
+    label = "CorePublisher public methods";
+    node [style=filled, color=red];
+
+    init;
+    trackTrackable;
+    addTrackable;
+    changeRoutingProfile;
+    removeTrackable;
+    stop;
+  }
+
+  subgraph CorePublisher_private_methods {
+    label = "CorePublisher private methods";
+    node [style=filled, color=lightgrey];
+
+    registerLocationObserver_onEnhancedLocationChanged [label = "registerLocationObserver.onEnhancedLocationChanged"];
+    registerLocationObserver_onRawLocationChanged [label = "registerLocationObserver.onRawLocationChanged"];
+    ResolutionPolicy_Methods_refresh [label = "ResolutionPolicy.Methods.refresh"];
+    sendEnhancedLocationUpdate;
+    sendRawLocationUpdate;
+  }
+
+  addTrackable -> AddTrackable;
+
+  changeRoutingProfile -> ChangeRoutingProfile;
+
+  init -> AblyConnectionStateChange;
+
+  registerLocationObserver_onEnhancedLocationChanged -> EnhancedLocationChanged;
+
+  registerLocationObserver_onRawLocationChanged -> RawLocationChanged;
+
+  removeTrackable -> RemoveTrackable;
+
+  ResolutionPolicy_Methods_refresh -> RefreshResolutionPolicy;
+
+  resolveResolution -> ChangeLocationEngineResolution;
+  resolveResolution -> UpdatePresenceData;
+
+  sendEnhancedLocationUpdate -> SendEnhancedLocationFailure;
+  sendEnhancedLocationUpdate -> SendEnhancedLocationSuccess;
+
+  sendRawLocationUpdate -> SendRawLocationFailure;
+  sendRawLocationUpdate -> SendRawLocationSuccess;
+
+  setDestination -> DestinationSet;
+
+  stop -> Stop;
+
+  trackTrackable -> SetActiveTrackable;
+}
