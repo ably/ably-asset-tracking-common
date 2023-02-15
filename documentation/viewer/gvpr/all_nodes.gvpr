@@ -1,0 +1,42 @@
+/* For each node in a graph, prints the node’s name and label (repeating the name if has no label), followed by the name and label (repeating the name if has no label) of its containing subgraph. For example:
+ *
+ * $ gvpr -f all_nodes.gvpr publisher.dot
+ * node_name: AblyConnectionStateChange
+ * node_label: AblyConnectionStateChange
+ * subgraph_name: cluster_workers
+ * subgraph_label: Workers
+ * node_name: registerLocationObserver_onRawLocationChanged
+ * node_label: registerLocationObserver.onRawLocationChanged
+ * subgraph_name: cluster_CorePublisher_private_methods
+ * subgraph_label: CorePublisher private methods
+ */
+
+N {
+    graph_t subgraph = fstsubg($.root);
+    while (subgraph) {
+        if (isIn(subgraph, $)) {
+            break;
+        } else {
+            subgraph = nxtsubg(subgraph);
+        }
+    }
+
+    if (!subgraph) {
+        print("ERROR: Failed to find containing subgraph for node ", $.name);
+        exit(1);
+    }
+
+    print("node_name: ", $.name);
+    if ($.label) {
+        print("node_label: ", $.label);
+    } else {
+        print("node_label: ", $.name);
+    }
+
+    print("subgraph_name: ", subgraph.name);
+    if (subgraph.label) {
+        print("subgraph_label: ", subgraph.label);
+    } else {
+        print("subgraph_label: ", subgraph.name);
+    }
+}

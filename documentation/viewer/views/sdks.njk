@@ -1,0 +1,11 @@
+{% extends "base.njk" %}
+
+{% block pageBody %}
+    <h1>Choose an SDK</h1>
+
+    <ul>
+        {% for sdk in sdks %}
+            <li><a href="{{sdk.href}}">{{sdk.title}}</a></li>
+        {% endfor %}
+    </ul
+{% endblock %}
