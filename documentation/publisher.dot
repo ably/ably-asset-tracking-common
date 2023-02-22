@@ -203,6 +203,8 @@ digraph {
   PresenceMessage -> updateSubscriber;
 
   RawLocationChanged -> processRawLocationUpdate;
+  // Via the rawLocationChangedCommands that setDestination sets on the properties
+  RawLocationChanged -> setDestination;
 
   RefreshResolutionPolicy -> resolveResolution;
 
