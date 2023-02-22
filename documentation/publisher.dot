@@ -39,17 +39,17 @@ digraph {
     label = "Ably wrapper";
     node [style=filled, color=yellow];
 
-    close;
-    connect;
-    disconnect;
+    close [label=<close<BR /><FONT POINT-SIZE="10">(For all channels, it leaves presence, <BR />unsubscribes, releases, then tells the <BR />Realtime instance to close)</FONT>>];
+    connect [label=<connect<BR /><FONT POINT-SIZE="10">(Attaches to channel)</FONT>>];
+    disconnect [label=<disconnect<BR /><FONT POINT-SIZE="10">(Leaves presence, unsubscribes, releases)</FONT>>];
     enterChannelPresence;
-    startConnection;
-    stopConnection;
-    subscribeForChannelStateChange;
-    subscribeForPresenceMessages;
+    startConnection [label=<startConnection<BR /><FONT POINT-SIZE="10">(Tells the Realtime instance to connect)</FONT>>];
+    stopConnection [label=<stopConnection<BR /><FONT POINT-SIZE="10">(Tells the Realtime instance to close)</FONT>>];
+    subscribeForChannelStateChange [label=<subscribeForChannelStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to channel state and emits current channel state)</FONT>>];
+    subscribeForPresenceMessages [label=<subscribeForPresenceMessages<BR /><FONT POINT-SIZE="10">(Subscribes for presence messages and optionally <BR />emits presence messages for current members)</FONT>>];
     updatePresenceData;
     waitForChannelToAttach;
-    subscribeForAblyStateChange;
+    subscribeForAblyStateChange [label=<subscribeForAblyStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to connection state changes)</FONT>>];
     getChannelState;
     sendRawLocation;
     sendEnhancedLocation;
