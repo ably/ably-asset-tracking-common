@@ -34,7 +34,17 @@ digraph {
     label = "CoreSubscriber public methods";
     node [style=filled, color=red];
 
-    init;
+    CoreSubscriber_init [label = "init"];
+  }
+
+  subgraph DefaultSubscriber_public_methods {
+    label = "DefaultSubscriber public methods";
+    node [style=filled, color=pink];
+
+    DefaultSubscriber_init [label = "init"];
+    start;
+    resolutionPreference;
+    stop;
   }
 
   subgraph CoreSubscriber_SubscriberInteractor {
@@ -84,7 +94,17 @@ digraph {
 
   // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
 
-  init -> UpdateConnectionState
+  CoreSubscriber_init -> UpdateConnectionState
 
   subscribeForChannelState -> UpdateChannelConnectionState
+
+  // DefaultSubscriber called methods
+
+  DefaultSubscriber_init -> CoreSubscriber_init;
+
+  // DefaultSubscriber enqueued workers (by calling core.enqueue)
+
+  start -> StartConnection;
+  resolutionPreference -> ChangeResolution;
+  stop -> StopConnection;
 }

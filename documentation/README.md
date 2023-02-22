@@ -13,6 +13,7 @@ The operations covered are of the following types:
 - `Publisher/SubscriberInteractor` methods
 - `CorePublisher/Subscriber` public methods
 - `CorePublisher/Subscriber` private methods
+- `DefaultSubscriber` public methods
 
 This documentation is only intended to be informative, to help newcomers to the project get a rough idea of the key components of the SDK and how they interact.
 
