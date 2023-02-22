@@ -234,8 +234,6 @@ digraph {
 
   // CorePublisher enqueued workers
 
-  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
-
   addTrackable -> AddTrackable;
 
   changeRoutingProfile -> ChangeRoutingProfile;
@@ -264,4 +262,28 @@ digraph {
   stop -> Stop;
 
   trackTrackable -> SetActiveTrackable;
+
+  // Method calls made internally in CorePublisher
+
+  trackTrackable -> addTrackable;
+
+  processRawLocationUpdate -> sendRawLocationUpdate;
+  processRawLocationUpdate -> processNextWaitingRawLocationUpdate;
+
+  processNextWaitingRawLocationUpdate -> processRawLocationUpdate;
+
+  retrySendingRawLocation -> sendRawLocationUpdate;
+
+  processEnhancedLocationUpdate -> sendEnhancedLocationUpdate;
+  processEnhancedLocationUpdate -> processNextWaitingEnhancedLocationUpdate;
+
+  processNextWaitingEnhancedLocationUpdate -> processEnhancedLocationUpdate;
+
+  retrySendingEnhancedLocation -> sendEnhancedLocationUpdate;
+
+  addSubscriber -> resolveResolution;
+
+  updateSubscriber -> resolveResolution;
+
+  removeSubscriber -> resolveResolution;
 }
