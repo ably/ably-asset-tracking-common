@@ -49,6 +49,10 @@ digraph {
     subscribeForPresenceMessages;
     updatePresenceData;
     waitForChannelToAttach;
+    subscribeForAblyStateChange;
+    getChannelState;
+    sendRawLocation;
+    sendEnhancedLocation;
   }
 
   subgraph CorePublisher_PublisherInteractor {
@@ -286,4 +290,12 @@ digraph {
   updateSubscriber -> resolveResolution;
 
   removeSubscriber -> resolveResolution;
+
+  // Ably wrapper methods called by CorePublisher
+
+  init -> subscribeForAblyStateChange;
+  sendEnhancedLocationUpdate -> getChannelState;
+  sendEnhancedLocationUpdate -> sendEnhancedLocation;
+  sendRawLocationUpdate -> getChannelState;
+  sendRawLocationUpdate -> sendRawLocation;
 }

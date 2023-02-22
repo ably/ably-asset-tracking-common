@@ -28,6 +28,10 @@ digraph {
     startConnection;
     subscribeForPresenceMessages;
     updatePresenceData;
+    subscribeForAblyStateChange;
+    subscribeForChannelStateChange;
+    ably_subscribeForEnhancedEvents [label = "subscribeForEnhancedEvents"];
+    ably_subscribeForRawEvents [label = "subscribeForRawEvents"];
   }
 
   subgraph CoreSubscriber_public_methods {
@@ -105,4 +109,11 @@ digraph {
   start -> StartConnection;
   resolutionPreference -> ChangeResolution;
   stop -> StopConnection;
+
+  // Ably wrapper methods called by CoreSubscriber
+
+  CoreSubscriber_init -> subscribeForAblyStateChange;
+  subscribeForChannelState -> subscribeForChannelStateChange;
+  subscribeForEnhancedEvents -> ably_subscribeForEnhancedEvents;
+  subscribeForRawEvents -> ably_subscribeForRawEvents;
 }
