@@ -35,6 +35,77 @@ digraph {
     UpdatePresenceData;
   }
 
+  subgraph ably_wrapper {
+    label = "Ably wrapper";
+    node [style=filled, color=yellow];
+
+    close;
+    connect;
+    disconnect;
+    enterChannelPresence;
+    startConnection;
+    stopConnection;
+    subscribeForChannelStateChange;
+    subscribeForPresenceMessages;
+    updatePresenceData;
+    waitForChannelToAttach;
+  }
+
+  subgraph CorePublisher_PublisherInteractor {
+    label = "CorePublisher’s implementation of PublisherInteractor";
+    node [style=filled, color=purple, fontcolor=white];
+
+    addSubscriber;
+    checkThreshold;
+    closeMapbox;
+    notifyResolutionPolicyThatActiveTrackableHasChanged;
+    notifyResolutionPolicyThatTrackableWasRemoved;
+    processEnhancedLocationUpdate;
+    processNextWaitingEnhancedLocationUpdate;
+    processNextWaitingRawLocationUpdate;
+    processRawLocationUpdate;
+    removeAllSubscribers;
+    removeCurrentDestination;
+    removeSubscriber;
+    resolveResolution;
+    retrySendingEnhancedLocation;
+    retrySendingRawLocation;
+    saveEnhancedLocationForFurtherSending;
+    saveRawLocationForFurtherSending;
+    setDestination;
+    setFinalTrackableState;
+    startLocationUpdates;
+    stopLocationUpdates;
+    updateLocations;
+    updateSubscriber;
+    updateTrackableState;
+    updateTrackableStateFlows;
+    updateTrackables;
+  }
+
+  subgraph CorePublisher_public_methods {
+    label = "CorePublisher public methods";
+    node [style=filled, color=red];
+
+    init;
+    trackTrackable;
+    addTrackable;
+    changeRoutingProfile;
+    removeTrackable;
+    stop;
+  }
+
+  subgraph CorePublisher_private_methods {
+    label = "CorePublisher private methods";
+    node [style=filled, color=lightgrey];
+
+    registerLocationObserver_onEnhancedLocationChanged [label = "registerLocationObserver.onEnhancedLocationChanged"];
+    registerLocationObserver_onRawLocationChanged [label = "registerLocationObserver.onRawLocationChanged"];
+    ResolutionPolicy_Methods_refresh [label = "ResolutionPolicy.Methods.refresh"];
+    sendEnhancedLocationUpdate;
+    sendRawLocationUpdate;
+  }
+
   // Worker equivalence
 
   RetryEnterPresence -> EnterPresence [label = "WorkerFactory resolves specification to"];
@@ -72,22 +143,6 @@ digraph {
 
   // Ably wrapper methods called by workers
 
-  subgraph ably_wrapper {
-    label = "Ably wrapper";
-    node [style=filled, color=yellow];
-
-    close;
-    connect;
-    disconnect;
-    enterChannelPresence;
-    startConnection;
-    stopConnection;
-    subscribeForChannelStateChange;
-    subscribeForPresenceMessages;
-    updatePresenceData;
-    waitForChannelToAttach;
-  }
-
   AddTrackable -> connect;
   AddTrackable -> startConnection;
 
@@ -114,38 +169,6 @@ digraph {
   UpdatePresenceData -> waitForChannelToAttach;
 
   // PublisherInteractor methods called by workers
-
-  subgraph CorePublisher_PublisherInteractor {
-    label = "CorePublisher’s implementation of PublisherInteractor";
-    node [style=filled, color=purple, fontcolor=white];
-
-    addSubscriber;
-    checkThreshold;
-    closeMapbox;
-    notifyResolutionPolicyThatActiveTrackableHasChanged;
-    notifyResolutionPolicyThatTrackableWasRemoved;
-    processEnhancedLocationUpdate;
-    processNextWaitingEnhancedLocationUpdate;
-    processNextWaitingRawLocationUpdate;
-    processRawLocationUpdate;
-    removeAllSubscribers;
-    removeCurrentDestination;
-    removeSubscriber;
-    resolveResolution;
-    retrySendingEnhancedLocation;
-    retrySendingRawLocation;
-    saveEnhancedLocationForFurtherSending;
-    saveRawLocationForFurtherSending;
-    setDestination;
-    setFinalTrackableState;
-    startLocationUpdates;
-    stopLocationUpdates;
-    updateLocations;
-    updateSubscriber;
-    updateTrackableState;
-    updateTrackableStateFlows;
-    updateTrackables;
-  }
 
   AblyConnectionStateChange -> updateTrackableState;
 
@@ -210,29 +233,6 @@ digraph {
   // CorePublisher enqueued workers
 
   // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
-
-  subgraph CorePublisher_public_methods {
-    label = "CorePublisher public methods";
-    node [style=filled, color=red];
-
-    init;
-    trackTrackable;
-    addTrackable;
-    changeRoutingProfile;
-    removeTrackable;
-    stop;
-  }
-
-  subgraph CorePublisher_private_methods {
-    label = "CorePublisher private methods";
-    node [style=filled, color=lightgrey];
-
-    registerLocationObserver_onEnhancedLocationChanged [label = "registerLocationObserver.onEnhancedLocationChanged"];
-    registerLocationObserver_onRawLocationChanged [label = "registerLocationObserver.onRawLocationChanged"];
-    ResolutionPolicy_Methods_refresh [label = "ResolutionPolicy.Methods.refresh"];
-    sendEnhancedLocationUpdate;
-    sendRawLocationUpdate;
-  }
 
   addTrackable -> AddTrackable;
 

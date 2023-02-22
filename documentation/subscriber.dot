@@ -16,18 +16,6 @@ digraph {
     UpdatePublisherPresence;
   }
 
-  // Workers posted by workers
-
-  ProcessInitialPresenceMessages -> SubscribeToChannel;
-
-  StartConnection -> SubscribeForPresenceMessages;
-
-  SubscribeForPresenceMessages -> Disconnect;
-  SubscribeForPresenceMessages -> ProcessInitialPresenceMessages;
-  SubscribeForPresenceMessages -> UpdatePublisherPresence;
-
-  // Ably wrapper methods called by workers
-
   subgraph ably_wrapper {
     label = "Ably wrapper";
     node [style=filled, color=yellow];
@@ -41,6 +29,35 @@ digraph {
     subscribeForPresenceMessages;
     updatePresenceData;
   }
+
+  subgraph CoreSubscriber_public_methods {
+    label = "CoreSubscriber public methods";
+    node [style=filled, color=red];
+
+    init;
+  }
+
+  subgraph CoreSubscriber_SubscriberInteractor {
+    label = "CoreSubscriber’s implementation of SubscriberInteractor"
+    node [style=filled, color=purple, fontcolor=white];
+
+    notifyAssetIsOffline;
+    subscribeForChannelState;
+    subscribeForEnhancedEvents;
+    subscribeForRawEvents;
+  }
+
+  // Workers posted by workers
+
+  ProcessInitialPresenceMessages -> SubscribeToChannel;
+
+  StartConnection -> SubscribeForPresenceMessages;
+
+  SubscribeForPresenceMessages -> Disconnect;
+  SubscribeForPresenceMessages -> ProcessInitialPresenceMessages;
+  SubscribeForPresenceMessages -> UpdatePublisherPresence;
+
+  // Ably wrapper methods called by workers
 
   ChangeResolution -> updatePresenceData;
 
@@ -57,16 +74,6 @@ digraph {
 
   // SubscriberInteractor methods called by workers
 
-  subgraph CoreSubscriber_SubscriberInteractor {
-    label = "CoreSubscriber’s implementation of SubscriberInteractor"
-    node [style=filled, color=purple, fontcolor=white];
-
-    notifyAssetIsOffline;
-    subscribeForChannelState;
-    subscribeForEnhancedEvents;
-    subscribeForRawEvents;
-  }
-
   StopConnection -> notifyAssetIsOffline;
 
   SubscribeToChannel -> subscribeForChannelState;
@@ -76,13 +83,6 @@ digraph {
   // CoreSubscriber enqueued workers
 
   // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
-
-  subgraph CoreSubscriber_public_methods {
-    label = "CoreSubscriber public methods";
-    node [style=filled, color=red];
-
-    init;
-  }
 
   init -> UpdateConnectionState
 
