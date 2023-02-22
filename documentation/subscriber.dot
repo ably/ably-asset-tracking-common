@@ -92,8 +92,6 @@ digraph {
 
   // CoreSubscriber enqueued workers
 
-  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
-
   CoreSubscriber_init -> UpdateConnectionState
 
   subscribeForChannelState -> UpdateChannelConnectionState
