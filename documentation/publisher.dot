@@ -110,6 +110,19 @@ digraph {
     sendRawLocationUpdate;
   }
 
+  subgraph ably_wrapper_listeners {
+    node [label="listener"]
+
+    /* This is a list of all of the listeners passed to the Ably wrapper (except for the ones where the listener does not trigger a behaviour that this graph is interested in.)
+     *
+     * These nodes are given names like listener_<caller_name>__<called_name>.
+     */
+
+    listener_ConnectionReady__subscribeForChannelStateChange;
+    listener_SubscribeToPresence__subscribeForPresenceMessages;
+    listener_init__subscribeForAblyStateChange;
+  }
+
   // Worker equivalence
 
   RetryEnterPresence -> EnterPresence [label = "WorkerFactory resolves specification to"];
@@ -124,8 +137,6 @@ digraph {
 
   ConnectionReady -> FailTrackable;
   ConnectionReady -> TrackableRemovalRequested;
-  // Via the channelStateChangeListener that addTrackable passes to AddTrackable
-  ConnectionReady -> ChannelConnectionStateChange;
 
   DisconnectSuccess -> StoppingConnectionFinished;
   DisconnectSuccess -> TrackableRemovalSuccess;
@@ -139,8 +150,6 @@ digraph {
 
   SubscribeToPresence -> SubscribeToPresence;
   SubscribeToPresence -> SubscribeToPresenceSuccess;
-  // Via the presenceUpdateListener that addTrackable passes to AddTrackable
-  SubscribeToPresence -> PresenceMessage;
 
   TrackableRemovalRequested -> StoppingConnectionFinished;
   TrackableRemovalRequested -> TrackableRemovalSuccess;
@@ -242,8 +251,6 @@ digraph {
 
   changeRoutingProfile -> ChangeRoutingProfile;
 
-  init -> AblyConnectionStateChange;
-
   registerLocationObserver_onEnhancedLocationChanged -> EnhancedLocationChanged;
 
   registerLocationObserver_onRawLocationChanged -> RawLocationChanged;
@@ -298,4 +305,26 @@ digraph {
   sendEnhancedLocationUpdate -> sendEnhancedLocation;
   sendRawLocationUpdate -> getChannelState;
   sendRawLocationUpdate -> sendRawLocation;
+
+  // Methods that pass listeners
+
+  ConnectionReady -> listener_ConnectionReady__subscribeForChannelStateChange [label = "passes", style = "dashed"];
+  SubscribeToPresence -> listener_SubscribeToPresence__subscribeForPresenceMessages [label = "passes", style = "dashed"];
+  init -> listener_init__subscribeForAblyStateChange [label = "passes", style = "dashed"];
+
+  // Methods that call listeners
+
+  subscribeForChannelStateChange -> listener_ConnectionReady__subscribeForChannelStateChange;
+  subscribeForPresenceMessages -> listener_SubscribeToPresence__subscribeForPresenceMessages;
+  subscribeForAblyStateChange -> listener_init__subscribeForAblyStateChange;
+
+  // Actions performed in listeners
+
+  // Via the channelStateChangeListener that addTrackable passes to AddTrackable
+  listener_ConnectionReady__subscribeForChannelStateChange -> ChannelConnectionStateChange;
+
+  // Via the presenceUpdateListener that addTrackable passes to AddTrackable
+  listener_SubscribeToPresence__subscribeForPresenceMessages -> PresenceMessage;
+
+  listener_init__subscribeForAblyStateChange -> AblyConnectionStateChange;
 }

@@ -64,7 +64,14 @@ export class AppService {
       }
     }
 
-    return subgraphs;
+    // The listeners aren’t of any use to present in a list to the user; they’re only interesting on the rendered graph.
+    const userFacingSubgraphs = subgraphs.filter(
+      (subgraph) =>
+        subgraph.name != 'passed_listeners' &&
+        subgraph.name != 'ably_wrapper_listeners',
+    );
+
+    return userFacingSubgraphs;
   }
 
   private async getAllNodesGvprOutput(source: DataSource): Promise<string> {

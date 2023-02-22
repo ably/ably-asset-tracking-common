@@ -34,6 +34,19 @@ digraph {
     ably_subscribeForRawEvents [label = "subscribeForRawEvents"];
   }
 
+  subgraph ably_wrapper_listeners {
+    node [label="listener"]
+
+    /* This is a list of all of the listeners passed to the Ably wrapper (except for the ones where the listener does not trigger a behaviour that this graph is interested in.)
+     *
+     * These nodes are given names like listener_<caller_name>__<called_name>.
+     */
+
+    listener_SubscribeForPresenceMessages__subscribeForPresenceMessages;
+    listener_CoreSubscriber_init__subscribeForAblyStateChange;
+    listener_subscribeForChannelState__subscribeForChannelStateChange;
+  }
+
   subgraph CoreSubscriber_public_methods {
     label = "CoreSubscriber public methods";
     node [style=filled, color=red];
@@ -69,7 +82,6 @@ digraph {
 
   SubscribeForPresenceMessages -> Disconnect;
   SubscribeForPresenceMessages -> ProcessInitialPresenceMessages;
-  SubscribeForPresenceMessages -> UpdatePublisherPresence;
 
   // Ably wrapper methods called by workers
 
@@ -94,12 +106,6 @@ digraph {
   SubscribeToChannel -> subscribeForEnhancedEvents;
   SubscribeToChannel -> subscribeForRawEvents;
 
-  // CoreSubscriber enqueued workers
-
-  CoreSubscriber_init -> UpdateConnectionState
-
-  subscribeForChannelState -> UpdateChannelConnectionState
-
   // DefaultSubscriber called methods
 
   DefaultSubscriber_init -> CoreSubscriber_init;
@@ -116,4 +122,22 @@ digraph {
   subscribeForChannelState -> subscribeForChannelStateChange;
   subscribeForEnhancedEvents -> ably_subscribeForEnhancedEvents;
   subscribeForRawEvents -> ably_subscribeForRawEvents;
+
+  // Methods that pass listeners
+
+  SubscribeForPresenceMessages -> listener_SubscribeForPresenceMessages__subscribeForPresenceMessages [label = "passes", style = "dashed"];
+  CoreSubscriber_init -> listener_CoreSubscriber_init__subscribeForAblyStateChange [label = "passes", style = "dashed"];
+  subscribeForChannelState -> listener_subscribeForChannelState__subscribeForChannelStateChange [label = "passes", style = "dashed"];
+
+  // Methods that call listeners
+
+  subscribeForPresenceMessages -> listener_SubscribeForPresenceMessages__subscribeForPresenceMessages;
+  subscribeForAblyStateChange -> listener_CoreSubscriber_init__subscribeForAblyStateChange;
+  subscribeForChannelStateChange -> listener_subscribeForChannelState__subscribeForChannelStateChange;
+
+  // Actions performed in listeners
+
+  listener_SubscribeForPresenceMessages__subscribeForPresenceMessages -> UpdatePublisherPresence;
+  listener_CoreSubscriber_init__subscribeForAblyStateChange -> UpdateConnectionState
+  listener_subscribeForChannelState__subscribeForChannelStateChange -> UpdateChannelConnectionState
 }
