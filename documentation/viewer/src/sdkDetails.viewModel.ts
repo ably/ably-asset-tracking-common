@@ -2,12 +2,13 @@ import { DataSource, Subgraph } from './app.service';
 
 interface SectionViewModel {
   title: string;
-  links: LinkViewModel[];
+  links: LinksViewModel[];
 }
 
-interface LinkViewModel {
+interface LinksViewModel {
   text: string;
-  href: string;
+  calleesHref: string;
+  callersHref: string;
 }
 
 export class SdkDetailsViewModel {
@@ -26,7 +27,8 @@ export class SdkDetailsViewModel {
     title: subgraph.label,
     links: subgraph.nodes.map((node) => ({
       text: node.label,
-      href: `/${this.source}/diagram/${node.name}`,
+      calleesHref: `/${this.source}/diagram/${node.name}?relatedNodes=callees`,
+      callersHref: `/${this.source}/diagram/${node.name}?relatedNodes=callers`,
     })),
   }));
 }
