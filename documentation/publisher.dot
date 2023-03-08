@@ -35,85 +35,25 @@ digraph {
     UpdatePresenceData;
   }
 
-  // Worker equivalence
-
-  RetryEnterPresence -> EnterPresence [label = "WorkerFactory resolves specification to"];
-
-  // Workers posted by workers
-
-  AddTrackable -> AddTrackable;
-  AddTrackable -> ConnectionReady;
-  AddTrackable -> EnterPresence;
-  AddTrackable -> FailTrackable;
-  AddTrackable -> SubscribeToPresence;
-
-  ConnectionReady -> FailTrackable;
-  ConnectionReady -> TrackableRemovalRequested;
-  // Via the channelStateChangeListener that addTrackable passes to AddTrackable
-  ConnectionReady -> ChannelConnectionStateChange;
-
-  DisconnectSuccess -> StoppingConnectionFinished;
-  DisconnectSuccess -> TrackableRemovalSuccess;
-
-  EnterPresence -> EnterPresenceSuccess;
-  EnterPresence -> FailTrackable;
-  EnterPresence -> RetryEnterPresence;
-
-  RemoveTrackable -> ChangeLocationEngineResolution;
-  RemoveTrackable -> DisconnectSuccess;
-
-  SubscribeToPresence -> SubscribeToPresence;
-  SubscribeToPresence -> SubscribeToPresenceSuccess;
-  // Via the presenceUpdateListener that addTrackable passes to AddTrackable
-  SubscribeToPresence -> PresenceMessage;
-
-  TrackableRemovalRequested -> StoppingConnectionFinished;
-  TrackableRemovalRequested -> TrackableRemovalSuccess;
-
-  // Ably wrapper methods called by workers
-
   subgraph ably_wrapper {
     label = "Ably wrapper";
     node [style=filled, color=yellow];
 
-    close;
-    connect;
-    disconnect;
+    close [label=<close<BR /><FONT POINT-SIZE="10">(For all channels, it leaves presence, <BR />unsubscribes, releases, then tells the <BR />Realtime instance to close)</FONT>>];
+    connect [label=<connect<BR /><FONT POINT-SIZE="10">(Attaches to channel)</FONT>>];
+    disconnect [label=<disconnect<BR /><FONT POINT-SIZE="10">(Leaves presence, unsubscribes, releases)</FONT>>];
     enterChannelPresence;
-    startConnection;
-    stopConnection;
-    subscribeForChannelStateChange;
-    subscribeForPresenceMessages;
+    startConnection [label=<startConnection<BR /><FONT POINT-SIZE="10">(Tells the Realtime instance to connect)</FONT>>];
+    stopConnection [label=<stopConnection<BR /><FONT POINT-SIZE="10">(Tells the Realtime instance to close)</FONT>>];
+    subscribeForChannelStateChange [label=<subscribeForChannelStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to channel state and emits current channel state)</FONT>>];
+    subscribeForPresenceMessages [label=<subscribeForPresenceMessages<BR /><FONT POINT-SIZE="10">(Subscribes for presence messages and optionally <BR />emits presence messages for current members)</FONT>>];
     updatePresenceData;
     waitForChannelToAttach;
+    subscribeForAblyStateChange [label=<subscribeForAblyStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to connection state changes)</FONT>>];
+    getChannelState;
+    sendRawLocation;
+    sendEnhancedLocation;
   }
-
-  AddTrackable -> connect;
-  AddTrackable -> startConnection;
-
-  ConnectionReady -> disconnect;
-  ConnectionReady -> subscribeForChannelStateChange;
-
-  DisconnectSuccess -> stopConnection;
-
-  EnterPresence -> enterChannelPresence;
-  EnterPresence -> waitForChannelToAttach;
-
-  FailTrackable -> disconnect;
-
-  RemoveTrackable -> disconnect;
-
-  Stop -> close;
-
-  SubscribeToPresence -> subscribeForPresenceMessages;
-  SubscribeToPresence -> waitForChannelToAttach;
-
-  TrackableRemovalRequested -> stopConnection;
-
-  UpdatePresenceData -> updatePresenceData;
-  UpdatePresenceData -> waitForChannelToAttach;
-
-  // PublisherInteractor methods called by workers
 
   subgraph CorePublisher_PublisherInteractor {
     label = "CorePublisher’s implementation of PublisherInteractor";
@@ -146,6 +86,102 @@ digraph {
     updateTrackableStateFlows;
     updateTrackables;
   }
+
+  subgraph CorePublisher_public_methods {
+    label = "CorePublisher public methods";
+    node [style=filled, color=red];
+
+    init;
+    trackTrackable;
+    addTrackable;
+    changeRoutingProfile;
+    removeTrackable;
+    stop;
+  }
+
+  subgraph CorePublisher_private_methods {
+    label = "CorePublisher private methods";
+    node [style=filled, color=lightgrey];
+
+    registerLocationObserver_onEnhancedLocationChanged [label = "registerLocationObserver.onEnhancedLocationChanged"];
+    registerLocationObserver_onRawLocationChanged [label = "registerLocationObserver.onRawLocationChanged"];
+    ResolutionPolicy_Methods_refresh [label = "ResolutionPolicy.Methods.refresh"];
+    sendEnhancedLocationUpdate;
+    sendRawLocationUpdate;
+  }
+
+  subgraph ably_wrapper_listeners {
+    node [label="listener"]
+
+    /* This is a list of all of the listeners passed to the Ably wrapper (except for the ones where the listener does not trigger a behaviour that this graph is interested in.)
+     *
+     * These nodes are given names like listener_<caller_name>__<called_name>.
+     */
+
+    listener_ConnectionReady__subscribeForChannelStateChange;
+    listener_SubscribeToPresence__subscribeForPresenceMessages;
+    listener_init__subscribeForAblyStateChange;
+  }
+
+  // Worker equivalence
+
+  RetryEnterPresence -> EnterPresence [label = "WorkerFactory resolves specification to"];
+
+  // Workers posted by workers
+
+  AddTrackable -> AddTrackable;
+  AddTrackable -> ConnectionReady;
+  AddTrackable -> EnterPresence;
+  AddTrackable -> FailTrackable;
+  AddTrackable -> SubscribeToPresence;
+
+  ConnectionReady -> FailTrackable;
+  ConnectionReady -> TrackableRemovalRequested;
+
+  DisconnectSuccess -> StoppingConnectionFinished;
+  DisconnectSuccess -> TrackableRemovalSuccess;
+
+  EnterPresence -> EnterPresenceSuccess;
+  EnterPresence -> FailTrackable;
+  EnterPresence -> RetryEnterPresence;
+
+  RemoveTrackable -> ChangeLocationEngineResolution;
+  RemoveTrackable -> DisconnectSuccess;
+
+  SubscribeToPresence -> SubscribeToPresence;
+  SubscribeToPresence -> SubscribeToPresenceSuccess;
+
+  TrackableRemovalRequested -> StoppingConnectionFinished;
+  TrackableRemovalRequested -> TrackableRemovalSuccess;
+
+  // Ably wrapper methods called by workers
+
+  AddTrackable -> connect;
+  AddTrackable -> startConnection;
+
+  ConnectionReady -> disconnect;
+  ConnectionReady -> subscribeForChannelStateChange;
+
+  DisconnectSuccess -> stopConnection;
+
+  EnterPresence -> enterChannelPresence;
+  EnterPresence -> waitForChannelToAttach;
+
+  FailTrackable -> disconnect;
+
+  RemoveTrackable -> disconnect;
+
+  Stop -> close;
+
+  SubscribeToPresence -> subscribeForPresenceMessages;
+  SubscribeToPresence -> waitForChannelToAttach;
+
+  TrackableRemovalRequested -> stopConnection;
+
+  UpdatePresenceData -> updatePresenceData;
+  UpdatePresenceData -> waitForChannelToAttach;
+
+  // PublisherInteractor methods called by workers
 
   AblyConnectionStateChange -> updateTrackableState;
 
@@ -180,6 +216,8 @@ digraph {
   PresenceMessage -> updateSubscriber;
 
   RawLocationChanged -> processRawLocationUpdate;
+  // Via the rawLocationChangedCommands that setDestination sets on the properties
+  RawLocationChanged -> setDestination;
 
   RefreshResolutionPolicy -> resolveResolution;
 
@@ -209,36 +247,9 @@ digraph {
 
   // CorePublisher enqueued workers
 
-  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
-
-  subgraph CorePublisher_public_methods {
-    label = "CorePublisher public methods";
-    node [style=filled, color=red];
-
-    init;
-    trackTrackable;
-    addTrackable;
-    changeRoutingProfile;
-    removeTrackable;
-    stop;
-  }
-
-  subgraph CorePublisher_private_methods {
-    label = "CorePublisher private methods";
-    node [style=filled, color=lightgrey];
-
-    registerLocationObserver_onEnhancedLocationChanged [label = "registerLocationObserver.onEnhancedLocationChanged"];
-    registerLocationObserver_onRawLocationChanged [label = "registerLocationObserver.onRawLocationChanged"];
-    ResolutionPolicy_Methods_refresh [label = "ResolutionPolicy.Methods.refresh"];
-    sendEnhancedLocationUpdate;
-    sendRawLocationUpdate;
-  }
-
   addTrackable -> AddTrackable;
 
   changeRoutingProfile -> ChangeRoutingProfile;
-
-  init -> AblyConnectionStateChange;
 
   registerLocationObserver_onEnhancedLocationChanged -> EnhancedLocationChanged;
 
@@ -262,4 +273,58 @@ digraph {
   stop -> Stop;
 
   trackTrackable -> SetActiveTrackable;
+
+  // Method calls made internally in CorePublisher
+
+  trackTrackable -> addTrackable;
+
+  processRawLocationUpdate -> sendRawLocationUpdate;
+  processRawLocationUpdate -> processNextWaitingRawLocationUpdate;
+
+  processNextWaitingRawLocationUpdate -> processRawLocationUpdate;
+
+  retrySendingRawLocation -> sendRawLocationUpdate;
+
+  processEnhancedLocationUpdate -> sendEnhancedLocationUpdate;
+  processEnhancedLocationUpdate -> processNextWaitingEnhancedLocationUpdate;
+
+  processNextWaitingEnhancedLocationUpdate -> processEnhancedLocationUpdate;
+
+  retrySendingEnhancedLocation -> sendEnhancedLocationUpdate;
+
+  addSubscriber -> resolveResolution;
+
+  updateSubscriber -> resolveResolution;
+
+  removeSubscriber -> resolveResolution;
+
+  // Ably wrapper methods called by CorePublisher
+
+  init -> subscribeForAblyStateChange;
+  sendEnhancedLocationUpdate -> getChannelState;
+  sendEnhancedLocationUpdate -> sendEnhancedLocation;
+  sendRawLocationUpdate -> getChannelState;
+  sendRawLocationUpdate -> sendRawLocation;
+
+  // Methods that pass listeners
+
+  ConnectionReady -> listener_ConnectionReady__subscribeForChannelStateChange [label = "passes", style = "dashed"];
+  SubscribeToPresence -> listener_SubscribeToPresence__subscribeForPresenceMessages [label = "passes", style = "dashed"];
+  init -> listener_init__subscribeForAblyStateChange [label = "passes", style = "dashed"];
+
+  // Methods that call listeners
+
+  subscribeForChannelStateChange -> listener_ConnectionReady__subscribeForChannelStateChange;
+  subscribeForPresenceMessages -> listener_SubscribeToPresence__subscribeForPresenceMessages;
+  subscribeForAblyStateChange -> listener_init__subscribeForAblyStateChange;
+
+  // Actions performed in listeners
+
+  // Via the channelStateChangeListener that addTrackable passes to AddTrackable
+  listener_ConnectionReady__subscribeForChannelStateChange -> ChannelConnectionStateChange;
+
+  // Via the presenceUpdateListener that addTrackable passes to AddTrackable
+  listener_SubscribeToPresence__subscribeForPresenceMessages -> PresenceMessage;
+
+  listener_init__subscribeForAblyStateChange -> AblyConnectionStateChange;
 }

@@ -16,6 +16,64 @@ digraph {
     UpdatePublisherPresence;
   }
 
+  subgraph ably_wrapper {
+    label = "Ably wrapper";
+    node [style=filled, color=yellow];
+
+    close [label=<close<BR /><FONT POINT-SIZE="10">(For all channels, it leaves presence, <BR />unsubscribes, releases, then tells the <BR />Realtime instance to close)</FONT>>];
+    connect [label=<connect<BR /><FONT POINT-SIZE="10">(Attaches to channel)</FONT>>];
+    disconnect [label=<disconnect<BR /><FONT POINT-SIZE="10">(Leaves presence, unsubscribes, releases)</FONT>>];
+    enterChannelPresence;
+    getCurrentPresence [label=<getCurrentPresence<BR /><FONT POINT-SIZE="10">(Returns a list of presence messages <BR />for current members)</FONT>>];
+    startConnection [label=<startConnection<BR /><FONT POINT-SIZE="10">(Tells the Realtime instance to connect)</FONT>>];
+    subscribeForPresenceMessages [label=<subscribeForPresenceMessages<BR /><FONT POINT-SIZE="10">(Subscribes for presence messages and optionally <BR />emits presence messages for current members)</FONT>>];
+    updatePresenceData;
+    subscribeForAblyStateChange [label=<subscribeForAblyStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to connection state changes)</FONT>>];
+    subscribeForChannelStateChange [label=<subscribeForChannelStateChange<BR /><FONT POINT-SIZE="10">(Subscribes to channel state and emits current channel state)</FONT>>];
+    ably_subscribeForEnhancedEvents [label = "subscribeForEnhancedEvents"];
+    ably_subscribeForRawEvents [label = "subscribeForRawEvents"];
+  }
+
+  subgraph ably_wrapper_listeners {
+    node [label="listener"]
+
+    /* This is a list of all of the listeners passed to the Ably wrapper (except for the ones where the listener does not trigger a behaviour that this graph is interested in.)
+     *
+     * These nodes are given names like listener_<caller_name>__<called_name>.
+     */
+
+    listener_SubscribeForPresenceMessages__subscribeForPresenceMessages;
+    listener_CoreSubscriber_init__subscribeForAblyStateChange;
+    listener_subscribeForChannelState__subscribeForChannelStateChange;
+  }
+
+  subgraph CoreSubscriber_public_methods {
+    label = "CoreSubscriber public methods";
+    node [style=filled, color=red];
+
+    CoreSubscriber_init [label = "init"];
+  }
+
+  subgraph DefaultSubscriber_public_methods {
+    label = "DefaultSubscriber public methods";
+    node [style=filled, color=pink];
+
+    DefaultSubscriber_init [label = "init"];
+    start;
+    resolutionPreference;
+    stop;
+  }
+
+  subgraph CoreSubscriber_SubscriberInteractor {
+    label = "CoreSubscriber’s implementation of SubscriberInteractor"
+    node [style=filled, color=purple, fontcolor=white];
+
+    notifyAssetIsOffline;
+    subscribeForChannelState;
+    subscribeForEnhancedEvents;
+    subscribeForRawEvents;
+  }
+
   // Workers posted by workers
 
   ProcessInitialPresenceMessages -> SubscribeToChannel;
@@ -24,23 +82,8 @@ digraph {
 
   SubscribeForPresenceMessages -> Disconnect;
   SubscribeForPresenceMessages -> ProcessInitialPresenceMessages;
-  SubscribeForPresenceMessages -> UpdatePublisherPresence;
 
   // Ably wrapper methods called by workers
-
-  subgraph ably_wrapper {
-    label = "Ably wrapper";
-    node [style=filled, color=yellow];
-
-    close;
-    connect;
-    disconnect;
-    enterChannelPresence;
-    getCurrentPresence;
-    startConnection;
-    subscribeForPresenceMessages;
-    updatePresenceData;
-  }
 
   ChangeResolution -> updatePresenceData;
 
@@ -57,34 +100,44 @@ digraph {
 
   // SubscriberInteractor methods called by workers
 
-  subgraph CoreSubscriber_SubscriberInteractor {
-    label = "CoreSubscriber’s implementation of SubscriberInteractor"
-    node [style=filled, color=purple, fontcolor=white];
-
-    notifyAssetIsOffline;
-    subscribeForChannelState;
-    subscribeForEnhancedEvents;
-    subscribeForRawEvents;
-  }
-
   StopConnection -> notifyAssetIsOffline;
 
   SubscribeToChannel -> subscribeForChannelState;
   SubscribeToChannel -> subscribeForEnhancedEvents;
   SubscribeToChannel -> subscribeForRawEvents;
 
-  // CoreSubscriber enqueued workers
+  // DefaultSubscriber called methods
 
-  // This is currently done in a very simplistic way: doesn’t care about which methods call other methods inside this class
+  DefaultSubscriber_init -> CoreSubscriber_init;
 
-  subgraph CoreSubscriber_public_methods {
-    label = "CoreSubscriber public methods";
-    node [style=filled, color=red];
+  // DefaultSubscriber enqueued workers (by calling core.enqueue)
 
-    init;
-  }
+  start -> StartConnection;
+  resolutionPreference -> ChangeResolution;
+  stop -> StopConnection;
 
-  init -> UpdateConnectionState
+  // Ably wrapper methods called by CoreSubscriber
 
-  subscribeForChannelState -> UpdateChannelConnectionState
+  CoreSubscriber_init -> subscribeForAblyStateChange;
+  subscribeForChannelState -> subscribeForChannelStateChange;
+  subscribeForEnhancedEvents -> ably_subscribeForEnhancedEvents;
+  subscribeForRawEvents -> ably_subscribeForRawEvents;
+
+  // Methods that pass listeners
+
+  SubscribeForPresenceMessages -> listener_SubscribeForPresenceMessages__subscribeForPresenceMessages [label = "passes", style = "dashed"];
+  CoreSubscriber_init -> listener_CoreSubscriber_init__subscribeForAblyStateChange [label = "passes", style = "dashed"];
+  subscribeForChannelState -> listener_subscribeForChannelState__subscribeForChannelStateChange [label = "passes", style = "dashed"];
+
+  // Methods that call listeners
+
+  subscribeForPresenceMessages -> listener_SubscribeForPresenceMessages__subscribeForPresenceMessages;
+  subscribeForAblyStateChange -> listener_CoreSubscriber_init__subscribeForAblyStateChange;
+  subscribeForChannelStateChange -> listener_subscribeForChannelState__subscribeForChannelStateChange;
+
+  // Actions performed in listeners
+
+  listener_SubscribeForPresenceMessages__subscribeForPresenceMessages -> UpdatePublisherPresence;
+  listener_CoreSubscriber_init__subscribeForAblyStateChange -> UpdateConnectionState
+  listener_subscribeForChannelState__subscribeForChannelStateChange -> UpdateChannelConnectionState
 }
