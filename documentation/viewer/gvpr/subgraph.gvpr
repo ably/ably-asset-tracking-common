@@ -1,15 +1,20 @@
-/* Construct subgraph reachable from node ARGV[0] by forward edges
+/* Construct subgraph reachable from node ARGV[0] by forward or reverse edges
  *
  * Taken from https://forum.graphviz.org/t/print-only-specified-node-and-its-dependencies-from-large-graph/1011/4
  *
- * Usage: gvpr -f subgraph.gvpr -a addTrackable publisher.dot
+ * Usage: gvpr -f subgraph.gvpr -a addTrackable -a [forward|reverse] publisher.dot
  */
 
 BEG_G {
     node_t r = node($, ARGV[0]);
 
     $tvroot = r;
-    $tvtype = TV_fwd;
+
+    if (ARGV[1] == "forward") {
+        $tvtype = TV_fwd;
+    } else if (ARGV[1] == "reverse") {
+        $tvtype = TV_rev;
+    }
 }
 
 N {

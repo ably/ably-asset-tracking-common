@@ -12,6 +12,11 @@ interface Node {
   label: string;
 }
 
+export enum RelatedNodes {
+  Callers,
+  Callees,
+}
+
 export type DataSource = 'subscriber' | 'publisher';
 
 @Injectable()
@@ -73,18 +78,7 @@ export class AppService {
     });
   }
 
-  async generateSvgDiagram(
-    source: DataSource,
-    nodeName: string | null,
-  ): Promise<string> {
-    if (nodeName === null) {
-      return this.generateFullSvgDiagram(source);
-    } else {
-      return this.generateSvgDiagramForNode(source, nodeName);
-    }
-  }
-
-  private async generateFullSvgDiagram(source: DataSource): Promise<string> {
+  async generateFullSvgDiagram(source: DataSource): Promise<string> {
     return new Promise((resolve, reject) => {
       exec(`dot -Tsvg ../${source}.dot`, (err, stdout) => {
         if (err) {
@@ -95,13 +89,25 @@ export class AppService {
     });
   }
 
-  private async generateSvgDiagramForNode(
+  async generateSvgDiagramForNode(
     source: DataSource,
     nodeName: string,
+    relatedNodes: RelatedNodes,
   ): Promise<string> {
     const dotSource = await new Promise((resolve, reject) => {
+      let edgeDirectionArgument: string;
+
+      switch (relatedNodes) {
+        case RelatedNodes.Callers:
+          edgeDirectionArgument = 'reverse';
+          break;
+        case RelatedNodes.Callees:
+          edgeDirectionArgument = 'forward';
+          break;
+      }
+
       exec(
-        `gvpr -f gvpr/subgraph.gvpr -a ${nodeName} ../${source}.dot`,
+        `gvpr -f gvpr/subgraph.gvpr -a ${nodeName} -a ${edgeDirectionArgument} ../${source}.dot`,
         (err, stdout) => {
           if (err) {
             reject(err);
