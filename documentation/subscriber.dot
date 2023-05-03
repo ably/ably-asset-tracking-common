@@ -140,4 +140,35 @@ digraph {
   listener_SubscribeForPresenceMessages__subscribeForPresenceMessages -> UpdatePublisherPresence;
   listener_CoreSubscriber_init__subscribeForAblyStateChange -> UpdateConnectionState
   listener_subscribeForChannelState__subscribeForChannelStateChange -> UpdateChannelConnectionState
+
+  // CoreSubscriber public methods that create continuations, and how they’re passed around
+
+  //continuation_resolutionPreference
+
+  subgraph CoreSubscriber_callbacks {
+    node [label = "callback"];
+
+    callback__resolutionPreference;
+    callback__start;
+    callback__stop;
+  }
+
+  callback__resolutionPreference -> resolutionPreference [label = "completes", style = "dashed"];
+  // Now let's follow this callback through to all the places it can be called:
+  ChangeResolution -> callback__resolutionPreference;
+
+  callback__start -> start [label = "completes", style = "dashed"];
+  // Now let's follow this callback through to all the places it can be called...
+  StartConnection -> callback__start;
+  // StartConnection passes it to SubscribeForPresenceMessages:
+  SubscribeForPresenceMessages -> callback__start;
+  // SubscribeForPresenceMessages passes it to ProcessInitialPresenceMessages and Disconnect:
+  ProcessInitialPresenceMessages -> callback__start;
+  Disconnect -> callback__start;
+  // ProcessInitialPresenceMessages passes it to SubscribeToChannel:
+  SubscribeToChannel -> callback__start;
+
+  callback__stop -> stop [label = "completes", style = "dashed"];
+  // Now let's follow this callback through to all the places it can be called...
+  StopConnection -> callback__stop;
 }
