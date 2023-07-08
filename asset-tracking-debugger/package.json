@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ably": "^1.2.4",
+    "ably": "^1.2.41",
     "commander": "^7.0.0",
     "dotenv": "^8.2.0",
     "inquirer": "^7.3.3",
